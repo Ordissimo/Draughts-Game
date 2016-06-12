@@ -1,80 +1,47 @@
-import Piece
+import pygame
+from Piece import Piece
 
-class RedCrownPiece(Piece.Piece):
-	def __init__(self, image, kind, team):
-		Piece.Piece.__init__(self, image, kind, team)
+class RedCrownPiece(Piece):
+	def __init__(self):
+		Im_red_crown = pygame.image.load("Images/damaVermelha.png")
+		Piece.__init__(self, Im_red_crown, "crown", "red")
 
+	#See if the piece it's a enemy
 	def isEnemy(self, enemy):
 		if enemy != 0 and enemy.team == "black":
 			return True
 		return False
-	'''
-	def searchEnemy(self, currentLine, currentCollum, destinyLine, destinyCollum, board):
-		difLine = currentLine - destinyLine
-		difCollum = currentCollum - destinyCollum
-		#print "difLine:", difLine, "difCollum:", difCollum
-		if difLine > 0: #if it's up
-			if difCollum > 0: #if it's up-left
-				j = currentCollum-1
-				for i in range(currentLine-1, destinyLine, -1):
-					if(isinstance(board[i][j], Piece.Piece)):
-						return i, j
-					j -= 1
 
-			else: #if it's up-right
-				j = currentCollum+1
-				for i in range(currentLine-1, destinyLine, -1):
-					if(isinstance(board[i][j], Piece.Piece)):
-						return i, j
-					j += 1		
-			
-		else: #if it's down
-			if difCollum > 0: #if it's down-left
-				j = currentCollum-1
-				for i in range(currentLine+1, destinyLine):
-					if(isinstance(board[i][j], Piece.Piece)):
-						return i, j
-					j -= 1
-				
-			else: #if it's down-right
-				j = currentCollum+1
-				for i in range(currentLine+1, destinyLine):
-					if(isinstance(board[i][j], Piece.Piece)):
-						return i, j
-					j += 1
-		return -1, -1				
-	'''
 	#return all possible position where the piece can be moved
-	def canMove(self, currentLine, currentCollum, board):
+	def canMove(self, board):
 		possibleMoves = []
-
 		#down-right
-		j = currentCollum
-		for i in range(currentLine+1, 8):
+		j = self.collum
+		for i in range(self.line+1, 8):
 			j += 1
 			if self.inBoard(i, j) and board[i][j]== 0:
 				possibleMoves.append((i, j))
 			else:
 				break
 		#down-left
-		j = currentCollum
-		for i in range(currentLine+1, 8):
+		j = self.collum
+		for i in range(self.line+1, 8):
 			j -= 1
 			if self.inBoard(i, j) and board[i][j]== 0:
 				possibleMoves.append((i, j))
 			else:
 				break
 		#up-right
-		j = currentCollum
-		for i in range(currentLine-1, -1, -1):
+		j = self.collum
+		for i in range(self.line-1, -1, -1):
 			j += 1
 			if self.inBoard(i, j) and board[i][j]== 0:
 				possibleMoves.append((i, j))
 			else:
 				break
 		#up-left
-		j = currentCollum
-		for i in range(currentLine-1, -1, -1):
+		j = self.collum
+		for i in range(self.line-1, -1, -1):
 			j -= 1
 			if self.inBoard(i, j) and board[i][j]== 0:
 				possibleMoves.append((i, j))
@@ -82,12 +49,13 @@ class RedCrownPiece(Piece.Piece):
 				break	
 		return possibleMoves
 
-	def canEat(self, currentLine, currentCollum, board):
+	#Return all possible position where a enemy's piece will be killed
+	def canKill(self, board):
 		possibleMoves = []
 		
-		j = currentCollum
+		j = self.collum
 		firstEnemy = False
-		for i in range(currentLine+1, 8):
+		for i in range(self.line+1, 8):
 			j += 1
 			if firstEnemy:
 				if self.inBoard(i, j) and board[i][j]== 0:
@@ -100,9 +68,9 @@ class RedCrownPiece(Piece.Piece):
 				else: 
 					break
 
-		j = currentCollum
+		j = self.collum
 		firstEnemy = False
-		for i in range(currentLine+1, 8):
+		for i in range(self.line+1, 8):
 			j -= 1
 			if firstEnemy:
 				if self.inBoard(i, j) and board[i][j]== 0:
@@ -115,9 +83,9 @@ class RedCrownPiece(Piece.Piece):
 				else: 
 					break
 
-		j = currentCollum
+		j = self.collum
 		firstEnemy = False
-		for i in range(currentLine-1, -1, -1):
+		for i in range(self.line-1, -1, -1):
 			j += 1
 			if firstEnemy:
 				if self.inBoard(i, j) and board[i][j]== 0:
@@ -130,9 +98,9 @@ class RedCrownPiece(Piece.Piece):
 				else: 
 					break
 
-		j = currentCollum
+		j = self.collum
 		firstEnemy = False
-		for i in range(currentLine-1, -1, -1):
+		for i in range(self.line-1, -1, -1):
 			j -= 1
 			if firstEnemy:
 				if self.inBoard(i, j) and board[i][j]== 0:

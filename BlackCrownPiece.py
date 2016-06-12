@@ -1,55 +1,61 @@
-import Piece
+import pygame
+from Piece import Piece
 
-class BlackCrownPiece(Piece.Piece):
-	def __init__(self, image, kind, team):
-		Piece.Piece.__init__(self, image, kind, team)
+class BlackCrownPiece(Piece):
+	def __init__(self):
+		Im_black_crown = pygame.image.load("Images/damaNegra.png")
+		Piece.__init__(self, Im_black_crown, "crown", "black")
 
-
+	#See if the piece it's a enemy
 	def isEnemy(self, enemy):
 		if enemy != 0 and enemy.team == "red":
 			return True
 		return False
 
 	#return all possible position where the piece can be moved
-	def canMove(self, currentLine, currentCollum, board):
+	def canMove(self, board):
 		possibleMoves = []
-
-		j = currentCollum
-		for i in range(currentLine+1, 8):
+		#down-right
+		j = self.collum
+		for i in range(self.line+1, 8):
 			j += 1
 			if self.inBoard(i, j) and board[i][j]== 0:
 				possibleMoves.append((i, j))
 			else:
 				break
-		j = currentCollum
-		for i in range(currentLine+1, 8):
+		#down-left
+		j = self.collum
+		for i in range(self.line+1, 8):
 			j -= 1
 			if self.inBoard(i, j) and board[i][j]== 0:
 				possibleMoves.append((i, j))
 			else:
 				break
-		j = currentCollum
-		for i in range(currentLine-1, -1, -1):
+		#up-right
+		j = self.collum
+		for i in range(self.line-1, -1, -1):
 			j += 1
 			if self.inBoard(i, j) and board[i][j]== 0:
 				possibleMoves.append((i, j))
 			else:
 				break
-		j = currentCollum
-		for i in range(currentLine-1, -1, -1):
+		#up-left
+		j = self.collum
+		for i in range(self.line-1, -1, -1):
 			j -= 1
 			if self.inBoard(i, j) and board[i][j]== 0:
 				possibleMoves.append((i, j))
 			else:
-				break
+				break	
 		return possibleMoves
 
-	def canEat(self, currentLine, currentCollum, board):
+	#Return all possible position where a enemy's piece will be killed
+	def canKill(self, board):
 		possibleMoves = []
 		
-		j = currentCollum
+		j = self.collum
 		firstEnemy = False
-		for i in range(currentLine+1, 8):
+		for i in range(self.line+1, 8):
 			j += 1
 			if firstEnemy:
 				if self.inBoard(i, j) and board[i][j]== 0:
@@ -62,9 +68,9 @@ class BlackCrownPiece(Piece.Piece):
 				else: 
 					break
 
-		j = currentCollum
+		j = self.collum
 		firstEnemy = False
-		for i in range(currentLine+1, 8):
+		for i in range(self.line+1, 8):
 			j -= 1
 			if firstEnemy:
 				if self.inBoard(i, j) and board[i][j]== 0:
@@ -77,9 +83,9 @@ class BlackCrownPiece(Piece.Piece):
 				else: 
 					break
 
-		j = currentCollum
+		j = self.collum
 		firstEnemy = False
-		for i in range(currentLine-1, -1, -1):
+		for i in range(self.line-1, -1, -1):
 			j += 1
 			if firstEnemy:
 				if self.inBoard(i, j) and board[i][j]== 0:
@@ -92,9 +98,9 @@ class BlackCrownPiece(Piece.Piece):
 				else: 
 					break
 
-		j = currentCollum
+		j = self.collum
 		firstEnemy = False
-		for i in range(currentLine-1, -1, -1):
+		for i in range(self.line-1, -1, -1):
 			j -= 1
 			if firstEnemy:
 				if self.inBoard(i, j) and board[i][j]== 0:
