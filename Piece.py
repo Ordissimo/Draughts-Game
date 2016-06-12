@@ -44,12 +44,11 @@ class Piece:
 			crescent = 1
 			if origin[0] > destiny[0]:
 				crescent = -1
-				for i in range(origin[0], destiny[0], crescent):
-					enemyLine += difLine
-					enemyCollum += difCollum
-					#print "enemy:", enemyLine, enemyCollum
-					if board[enemyLine][enemyCollum] != 0:
-						board[enemyLine][enemyCollum] = 0
+			for i in range(origin[0], destiny[0]-1, crescent):
+				enemyLine += difLine
+				enemyCollum += difCollum
+				if board[enemyLine][enemyCollum] != 0:
+					board[enemyLine][enemyCollum] = 0
 
 
 

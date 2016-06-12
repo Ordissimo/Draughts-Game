@@ -99,7 +99,7 @@ blackCrown = BlackCrownPiece(Im_black_crown, "crown", "black")
 #making my matrix's board
 board = [[0, black, 0, black, 0, black, 0, black], 
 		[black, 0, black, 0, black, 0, black, 0],
-		[0, black, 0, black, 0, black, 0, black],
+		[0, blackCrown, 0, black, 0, black, 0, black],
 		[0, 0, red, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0],
 		[red, 0, red, 0, red, 0, red, 0],
@@ -116,9 +116,9 @@ hasOutline = False
 canKillAnother = False
 num_black = 12
 num_red = 12
-
 npc = NPC()
 sequenceKill = False
+time = 0
 #Game loop
 while 1:
 		
@@ -133,11 +133,12 @@ while 1:
 				hasKill, path = npc.play(sequenceKill, board)
 				print path
 				if not hasKill:
-					print path
 					if len(path) > 0:
-						board[path[0][0]][path[0][1]].makeMove(path[0], path[1])
+						board[path[0][0]][path[0][1]].makeMove(path[0], path[1], board)
+						print "move", path[0], "to", path[1]
 					turn += 1
 					sequenceKill = False
+					crown(board, path[1][0], path[1][1])
 				else:
 					pygame.time.wait(1000) #wait 1 sec
 					time = 0
@@ -145,7 +146,12 @@ while 1:
 			else:
 				time += 1
 				if time < len(path):
+					print path[time-1], "gonna eat moving to", path[time]
 					board[path[time-1][0]][path[time-1][1]].Eat(path[time-1], path[time], board)
+				else:
+					sequenceKill = False
+					turn += 1
+					crown(board, path[time-1][0], path[time-1][1])
 				
 		#Winner's conditions
 		if num_red == 0:
