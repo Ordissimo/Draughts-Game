@@ -1,6 +1,14 @@
 from Piece import Piece
 import copy
 
+def thing(piece):
+	if piece == 0:
+		return "0";
+	if piece.team == "red":
+		return "redOne"
+	if piece.team == "black":
+		return "blackOne"
+
 def printB(board):
 	for i in range(0, 8):
 		for j in range(0, 8):
@@ -39,6 +47,7 @@ class NPC:
 					blackPositions.append((i, j))
 		return blackPositions
 
+	#return a list of every piece that can eat some enemy's piece
 	def searchKillers(self, list, board):
 		listKillers = []
 		for i in range(0, len(list)):
@@ -49,6 +58,7 @@ class NPC:
 				listKillers.append(list[i])
 		return listKillers
 
+	#Choose the next movement
 	def standartMove(self, piecesList, board):
 		biggerAdaptation = 0
 		bestMove = [(-1, -1), (-1,-1)]
@@ -62,21 +72,32 @@ class NPC:
 		return bestMove
 
 	#Function that should find the best path reached by that piece. RECURSIVE FUNCTION
-	def killingQuantity(self, pieceLine, pieceCollum, adaptation, path, auxBoard):
-		keepKilling = auxBoard[pieceLine][pieceCollum].canEat(pieceLine, pieceCollum, auxBoard)
-		path.append((pieceLine, pieceCollum))
+	def killingQuantity(self, pieceLine, pieceCollum, adaptation, path, board):
 		#print adaptation
-		#print "kp", keepKilling
-		if len(keepKilling) != 0:
-			for i in range(0, len(keepKilling)):
-				auxBoard[pieceLine][pieceCollum].Eat((pieceLine, pieceCollum), keepKilling[i], auxBoard)
-				aux, finalPoint = self.killingQuantity(keepKilling[i][0], keepKilling[i][1], adaptation+2, path, auxBoard)
-				if aux > adaptation:
-					adaptation = aux
-		else:
-			finalPoint = path
+		path.append((pieceLine, pieceCollum))
+		print "path", path
+		keepKilling = board[pieceLine][pieceCollum].canEat(pieceLine, pieceCollum, board)
+		if len(keepKilling) == 0:
+			return adaptation, path
 
-		return adaptation, finalPoint
+		listPath = []
+		index = 0
+		for i in range(0, len(keepKilling)):
+			#newNode = [(pieceLine, pieceCollum)]
+
+			auxBoard = copy.deepcopy(board)
+			auxBoard[pieceLine][pieceCollum].Eat((pieceLine, pieceCollum), keepKilling[i], auxBoard)
+			aux, path = self.killingQuantity(keepKilling[i][0], keepKilling[i][1], adaptation+2, path, auxBoard)
+			listPath.append(copy.copy(path))
+			path.pop()	
+			if aux > adaptation:
+				adaptation = aux
+				index = i
+		if len(listPath) > 0:
+			path = listPath[index]
+		return adaptation, path
+
+		#print pieceLine, pieceCollum, "that is", thing(board[pieceLine][pieceCollum]), "can eat", keepKilling
 
 	#Return the best adaptation and the path of kills
 	def kill(self, piecesList, board):
@@ -85,9 +106,8 @@ class NPC:
 		path = []
 		auxBoard = []
 		for i in range(0, len(killers)):
-			
 			newAdaptation, newPath = self.killingQuantity(killers[i][0], killers[i][1], 0, [], copy.deepcopy(board))
-			#print "peca na", killers[i][0], killers[i][1], "->", newAdaptation, newPath
+			print "peca na", killers[i][0], killers[i][1], "->", newAdaptation, newPath
 			if newAdaptation > adaptation:
 				adaptation = newAdaptation
 				path = newPath

@@ -99,11 +99,11 @@ blackCrown = BlackCrownPiece(Im_black_crown, "crown", "black")
 #making my matrix's board
 board = [[0, black, 0, black, 0, black, 0, black], 
 		[black, 0, black, 0, black, 0, black, 0],
-		[0, blackCrown, 0, black, 0, black, 0, black],
-		[0, 0, red, 0, 0, 0, 0, 0],
+		[0, black, 0, black, 0, black, 0, black],
+		[0, 0, red, 0, 0, 0, red, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0],
-		[red, 0, red, 0, red, 0, red, 0],
-		[0, red, 0, red, 0, 0, 0, 0],
+		[red, 0, red, 0, red, 0, 0, 0],
+		[0, 0, 0, red, 0, 0, 0, 0],
 		[red, 0, red, 0, red, 0, red, 0]]
 #Variables
 line = 0
@@ -131,7 +131,7 @@ while 1:
 		if turn%2 == 1:
 			if not sequenceKill:
 				hasKill, path = npc.play(sequenceKill, board)
-				print path
+				#print path
 				if not hasKill:
 					if len(path) > 0:
 						board[path[0][0]][path[0][1]].makeMove(path[0], path[1], board)
