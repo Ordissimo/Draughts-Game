@@ -42,12 +42,22 @@ class NPC:
 	#Choose the next movement
 	def standartMove(self, piecesList, board):
 		adaptation = 0
+		adaptationDefense = 0
 		movement = [(-1, -1), (-1,-1)]
+		movementDefense = []
 		for i in range (0, len(piecesList)):
 			newAdaptation, newMovement = board[piecesList[i][0]][piecesList[i][1]].adaptMove(board)
 			if newAdaptation > adaptation:
 				adaptation = newAdaptation
 				movement = newMovement
+			newDefense, defMove = board[piecesList[i][0]][piecesList[i][1]].AdaptDefense(board)
+			if newDefense > adaptationDefense:
+				adaptationDefense = newDefense
+				movementDefense =  defMove
+			print piecesList[i][0], piecesList[i][1], "defense", adaptationDefense, movement
+		if adaptationDefense > adaptation:
+			adaptation = adaptationDefense
+			movement = movementDefense
 		return adaptation, movement
 
 	#Function that should find the best path reached by that piece. RECURSIVE FUNCTION
@@ -90,6 +100,8 @@ class NPC:
 	def play(self, sequenceMove, board):
 		hasKilled = False
 		myPieces = self.findAllBlack(board)
+		if len(myPieces) == 0:
+			return False, [(-10, -10)]
 		adapKill, chosedMove = self.kill(myPieces, board)
 		print "adaptKill", adapKill
 		if adapKill > 0:
@@ -97,5 +109,4 @@ class NPC:
 		else:
 			if not sequenceMove:
 				adapMove, chosedMove = self.standartMove(myPieces, board)
-				print "adaptMove", adapMove
 		return hasKilled, chosedMove

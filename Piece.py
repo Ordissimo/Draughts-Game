@@ -53,6 +53,61 @@ class Piece:
 				bestMove = [(self.line, self.collum), moves[i]]
 		return biggerAdaptation, bestMove
 
+	#See if it can do a defensive movement
+	def AdaptDefense(self, board):
+		adaptation = 0
+		bestMove = []
+		moves = board[ self.line ][ self.collum ].canMove(board)
+		auxMoves = copy.deepcopy(moves)
+
+		allEnemies = []
+		for i in range(0, 8):
+			for j in range(0, 8):
+				if board[i][j] != 0 and board[i][j].team == "red":
+					allEnemies.append((i, j))
+		newAdaptation = 0
+		enemyMoves = []
+		enemyKiller = []
+		for i in range(0, len(allEnemies)):
+			newAdaptation = 0
+			
+			#if someone can kill me at some move i choose
+			enemyMoves = board[allEnemies[i][0]][allEnemies[i][1]].canMove(board)
+			for j in range(0, len(moves)):
+				if moves[j] in enemyMoves:
+					if moves[j] in auxMoves:
+						print self.line, self. collum, "should avoid", moves[j]
+						auxMoves.remove(moves[j])
+						newAdaptation = 2
+
+			#See if i can protect some friend of be killed
+			moves = copy.deepcopy(auxMoves)
+			enemyKiller = board[allEnemies[i][0]][allEnemies[i][1]].canKill(board)
+			for j in range(0, len(moves)):
+				if moves[j] in enemyKiller:
+					auxMoves = []
+					print self.line, self. collum, "should protect", moves[j]
+					auxMoves.append(moves[j])
+					newAdaptation += 4
+					break
+
+			if newAdaptation > adaptation:
+				adaptation = newAdaptation
+				bestMove = [(self.line, self.collum)]
+				bestMove = bestMove + auxMoves
+		return adaptation, bestMove
+
+
+
+
+
+
+
+
+
+
+
+	#Choose the best move to eat most of enemy's piece
 	def adaptKill(self, board):
 		victims = board[self.line][self.collum].canKill(board)
 		#See if can't kill
@@ -85,8 +140,6 @@ class Piece:
 		if len(listPath) > 0:
 			path = listPath[index]
 		return adaptation, path
-
-
 
 	#To move for another place
 	def makeMove(self, destiny, board):

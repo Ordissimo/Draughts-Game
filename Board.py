@@ -94,9 +94,9 @@ redCrown = RedCrownPiece()
 blackCrown = BlackCrownPiece()
 '''
 #making my matrix's board
-board = [[0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece()], 
-		[BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0],
-		[0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece()],
+board = [[0, BlackPiece(), 0, 0, 0, 0, 0, 0], 
+		[BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, 0, 0],
+		[0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0],
 		[RedPiece(), 0, RedPiece(), 0, RedPiece(), 0, RedPiece(), 0],
@@ -147,6 +147,9 @@ while 1:
 		if turn%2 == 1:
 			if not sequenceKill:
 				hasKill, path = npc.play(sequenceKill, board)
+				if path[0] == (-10,-10):
+					num_black = 0
+					break
 				#print path
 				if not hasKill:
 					if len(path) > 0:
