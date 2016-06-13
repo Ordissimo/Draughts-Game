@@ -76,7 +76,7 @@ class Piece:
 			for j in range(0, len(moves)):
 				if moves[j] in enemyMoves:
 					if moves[j] in auxMoves:
-						print self.line, self. collum, "should avoid", moves[j]
+						#print self.line, self. collum, "should avoid", moves[j]
 						auxMoves.remove(moves[j])
 						newAdaptation = 2
 
@@ -86,7 +86,7 @@ class Piece:
 			for j in range(0, len(moves)):
 				if moves[j] in enemyKiller:
 					auxMoves = []
-					print self.line, self. collum, "should protect", moves[j]
+					#print self.line, self. collum, "should protect", moves[j]
 					auxMoves.append(moves[j])
 					newAdaptation += 4
 					break
@@ -96,16 +96,6 @@ class Piece:
 				bestMove = [(self.line, self.collum)]
 				bestMove = bestMove + auxMoves
 		return adaptation, bestMove
-
-
-
-
-
-
-
-
-
-
 
 	#Choose the best move to eat most of enemy's piece
 	def adaptKill(self, board):

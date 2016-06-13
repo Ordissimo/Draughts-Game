@@ -54,7 +54,7 @@ class NPC:
 			if newDefense > adaptationDefense:
 				adaptationDefense = newDefense
 				movementDefense =  defMove
-			print piecesList[i][0], piecesList[i][1], "defense", adaptationDefense, movement
+			#print piecesList[i][0], piecesList[i][1], "defense", adaptationDefense, movement
 		if adaptationDefense > adaptation:
 			adaptation = adaptationDefense
 			movement = movementDefense
@@ -103,7 +103,7 @@ class NPC:
 		if len(myPieces) == 0:
 			return False, [(-10, -10)]
 		adapKill, chosedMove = self.kill(myPieces, board)
-		print "adaptKill", adapKill
+		#print "adaptKill", adapKill
 		if adapKill > 0:
 			hasKilled = True
 		else:

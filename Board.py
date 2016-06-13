@@ -86,17 +86,11 @@ Im_outline_possibilities = pygame.image.load("Images/ol2.png")
 #Text label
 myFont = pygame.font.SysFont("Comic Sans Ms", 36)
 turnText = myFont.render("Turn 1", 1, WHITE_COLOR)
-'''
-#Instance my Pieces
-red = RedPiece()
-black = BlackPiece()
-redCrown = RedCrownPiece()
-blackCrown = BlackCrownPiece()
-'''
+
 #making my matrix's board
-board = [[0, BlackPiece(), 0, 0, 0, 0, 0, 0], 
-		[BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, 0, 0],
-		[0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, 0],
+board = [[0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece()], 
+		[BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0],
+		[0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece()],
 		[0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0],
 		[RedPiece(), 0, RedPiece(), 0, RedPiece(), 0, RedPiece(), 0],
@@ -186,7 +180,7 @@ while 1:
 			
 			#If the click was out of the board
 			if collum < 0 or collum >= 8 or line < 0 or line >= 8:
-				print "out of range"
+				#print "out of range"
 				break;
 
 			#If the click was on a piece of it's own turn
