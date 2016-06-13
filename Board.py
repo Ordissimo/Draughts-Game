@@ -94,12 +94,12 @@ redCrown = RedCrownPiece()
 blackCrown = BlackCrownPiece()
 '''
 #making my matrix's board
-board = [[0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, 0], 
-		[0, 0, BlackPiece(), 0, BlackPiece(), 0, 0, 0],
-		[0, BlackPiece(), 0, 0, 0, BlackPiece(), 0, BlackPiece()],
+board = [[0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece()], 
+		[BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0],
+		[0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece()],
 		[0, 0, 0, 0, 0, 0, 0, 0],
-		[0, BlackPiece(), 0, RedCrownPiece(), 0, 0, 0, 0],
-		[0, 0, RedPiece(), 0, RedPiece(), 0, RedPiece(), 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[RedPiece(), 0, RedPiece(), 0, RedPiece(), 0, RedPiece(), 0],
 		[0, RedPiece(), 0, RedPiece(), 0, RedPiece(), 0, RedPiece()],
 		[RedPiece(), 0, RedPiece(), 0, RedPiece(), 0, RedPiece(), 0]]
 
@@ -143,6 +143,7 @@ while 1:
 			turnText = turnText = myFont.render("We have a Draw...", 1, (150, 150, 150))
 			break
 
+		#NPC's time to play
 		if turn%2 == 1:
 			if not sequenceKill:
 				hasKill, path = npc.play(sequenceKill, board)
@@ -217,7 +218,7 @@ while 1:
 						selected_piece.makeKill((line,collum),board)
 						#Counting the number of remanescents pieces
 						num_black -= 1
-						print "Vermelhas:", num_red, "Pretas:", num_black
+						#print "Vermelhas:", num_red, "Pretas:", num_black
 
 						#Seeing if the piece can kill another one
 						possible_to_kill = selected_piece.canKill(board)

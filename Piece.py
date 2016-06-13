@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+import copy
 
 #Abrstract Class
 # A piece of the game
@@ -11,6 +12,14 @@ class Piece:
 		self.team = team
 		self.line = -1
 		self.collum = -1
+		self.valueBoard = [[4, 4, 4, 4, 4, 4, 4, 4],
+						[4, 3, 3, 3, 3, 3, 3, 4],
+						[4, 3, 2, 2, 2, 2, 3, 4],
+						[4, 3, 2, 1, 1, 2, 3, 4],
+						[4, 3, 2, 1, 1, 2, 3, 4],
+						[4, 3, 2, 2, 2, 2, 3, 4],
+						[4, 3, 3, 3, 3, 3, 3, 4],
+						[10, 10, 10, 10, 10, 10, 10, 10]]
 
 	#Return the current position of the piece
 	def getPosition(self):
@@ -32,6 +41,52 @@ class Piece:
 		if collum < 0 or collum >= 8:
 			return False
 		return True
+
+	#Choose the next movement
+	def adaptMove(self, board):
+		biggerAdaptation = 0
+		bestMove = [(-1, -1), (-1,-1)]
+		moves = board[ self.line ][ self.collum ].canMove(board)
+		for i in range(0, len(moves)):
+			if self.valueBoard[moves[i][0]][moves[i][1]] > biggerAdaptation:
+				biggerAdaptation = self.valueBoard[moves[i][0]][moves[i][1]]
+				bestMove = [(self.line, self.collum), moves[i]]
+		return biggerAdaptation, bestMove
+
+	def adaptKill(self, board):
+		victims = board[self.line][self.collum].canKill(board)
+		#See if can't kill
+		if len(victims) == 0:
+			return 0, []
+
+		adapKill, bestPath = self.bestKillerPath(self.line, self.collum, 0, [], copy.deepcopy(board) )
+		return adapKill, bestPath
+
+	#Function that should find the best path reached by that piece. RECURSIVE FUNCTION
+	def bestKillerPath(self, pieceLine, pieceCollum, adaptation, path, board):
+		#print adaptation
+		path.append((pieceLine, pieceCollum))
+		nextVictims = board[pieceLine][pieceCollum].canKill(board)
+		if len(nextVictims) == 0:
+			return adaptation, path
+
+		listPath = []
+		index = 0
+		for i in range(0, len(nextVictims)):
+			#newNode = [(pieceLine, pieceCollum)]
+			auxBoard = copy.deepcopy(board)
+			auxBoard[pieceLine][pieceCollum].makeKill(nextVictims[i], auxBoard)
+			aux, path = self.bestKillerPath(nextVictims[i][0], nextVictims[i][1], adaptation+2, path, auxBoard)
+			listPath.append(copy.copy(path))
+			path.pop()	
+			if aux > adaptation:
+				adaptation = aux
+				index = i
+		if len(listPath) > 0:
+			path = listPath[index]
+		return adaptation, path
+
+
 
 	#To move for another place
 	def makeMove(self, destiny, board):
@@ -63,7 +118,7 @@ class Piece:
 			for i in range(self.line, destiny[0], crescent):
 				enemyLine += difLine
 				enemyCollum += difCollum
-				print "enemy", enemyLine, enemyCollum
+				#print "enemy", enemyLine, enemyCollum
 				if board[enemyLine][enemyCollum] != 0:
 					board[enemyLine][enemyCollum] = 0
 		board[self.line][self.collum].makeMove(destiny, board)

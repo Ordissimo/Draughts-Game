@@ -11,6 +11,7 @@ def thing(piece):
 		return "blackOne"
 
 class NPC:
+	#Constructor
 	def __init__(self):
 		self.valueBoard = [[4, 4, 4, 4, 4, 4, 4, 4],
 						[4, 3, 3, 3, 3, 3, 3, 4],
@@ -40,16 +41,14 @@ class NPC:
 
 	#Choose the next movement
 	def standartMove(self, piecesList, board):
-		biggerAdaptation = 0
-		bestMove = [(-1, -1), (-1,-1)]
+		adaptation = 0
+		movement = [(-1, -1), (-1,-1)]
 		for i in range (0, len(piecesList)):
-			moves = board[ piecesList[i][0] ][ piecesList[i][1] ].canMove(board)
-			for j in range(0, len(moves)):
-				if self.valueBoard[moves[j][0]][moves[j][1]] > biggerAdaptation:
-					biggerAdaptation = self.valueBoard[moves[j][0]][moves[j][1]]
-					#print biggerAdaptation
-					bestMove = [piecesList[i], moves[j]]
-		return bestMove
+			newAdaptation, newMovement = board[piecesList[i][0]][piecesList[i][1]].adaptMove(board)
+			if newAdaptation > adaptation:
+				adaptation = newAdaptation
+				movement = newMovement
+		return adaptation, movement
 
 	#Function that should find the best path reached by that piece. RECURSIVE FUNCTION
 	def killingQuantity(self, pieceLine, pieceCollum, adaptation, path, board):
@@ -77,25 +76,26 @@ class NPC:
 
 	#Return the best adaptation and the path of kills
 	def kill(self, piecesList, board):
-		killers = self.searchKillers(piecesList, board)
 		adaptation = 0
 		path = []
 		auxBoard = []
-		for i in range(0, len(killers)):
-			newAdaptation, newPath = self.killingQuantity(killers[i][0], killers[i][1], 0, [], copy.deepcopy(board))
-			print "peca na", killers[i][0], killers[i][1], "->", newAdaptation, newPath
+		for i in range(0, len(piecesList)):
+			newAdaptation, newPath = board[piecesList[i][0]][piecesList[i][1]].adaptKill(board)
 			if newAdaptation > adaptation:
 				adaptation = newAdaptation
 				path = newPath
 		return adaptation, path
 
+	#Function that will chose the best movement
 	def play(self, sequenceMove, board):
 		hasKilled = False
 		myPieces = self.findAllBlack(board)
 		adapKill, chosedMove = self.kill(myPieces, board)
+		print "adaptKill", adapKill
 		if adapKill > 0:
 			hasKilled = True
 		else:
 			if not sequenceMove:
-				chosedMove = self.standartMove(myPieces, board)
+				adapMove, chosedMove = self.standartMove(myPieces, board)
+				print "adaptMove", adapMove
 		return hasKilled, chosedMove
