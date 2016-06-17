@@ -185,4 +185,3 @@ class Piece:
 	@abstractmethod
 	def canKill(self, board):
 		pass
-
