@@ -3,9 +3,7 @@ class Player:
 	#Constructor
 	def __init__(self, board):
 		self.board = board
-		self.selected = None
-		self.movesOfSelectedToKill = []
-		self.movesOfSelectedToWalk = []
+		self.deselect()
 		self.clicked = None
 
 	#Set the last clicked position
@@ -31,8 +29,8 @@ class Player:
 	#Deselect the piece
 	def deselect(self):
 		self.selected = None
-		movesOfSelectedToKill = []
-		movesOfSelectedToWalk = []
+		self.movesOfSelectedToKill = []
+		self.movesOfSelectedToWalk = []
 
 	#Return a list of every piece that can eat any enemy's piece
 	def searchKillers(self):

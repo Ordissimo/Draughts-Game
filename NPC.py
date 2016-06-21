@@ -18,22 +18,12 @@ class NPC:
 	#Choose the next movement
 	def standartMove(self, piecesList, board):
 		adaptation = 0
-		adaptationDefense = 0
-		movement = [(-1, -1), (-1,-1)]
-		movementDefense = []
+		movement = [(-10, -10), (-10,-10)]
 		for i in range (0, len(piecesList)):
-			newAdaptation, newMovement = self.board[piecesList[i][0]][piecesList[i][1]].adaptMove(self.board)
+			newAdaptation, newMovement = self.board[piecesList[i][0]][piecesList[i][1]].adaptAdvance(self.board)
 			if newAdaptation > adaptation:
 				adaptation = newAdaptation
 				movement = newMovement
-			newDefense, defMove = self.board[piecesList[i][0]][piecesList[i][1]].AdaptDefense(self.board)
-			if newDefense > adaptationDefense:
-				adaptationDefense = newDefense
-				movementDefense =  defMove
-			#print piecesList[i][0], piecesList[i][1], "defense", adaptationDefense, movement
-		if adaptationDefense > adaptation:
-			adaptation = adaptationDefense
-			movement = movementDefense
 		return adaptation, movement
 
 	#Return the best adaptation and the path of kills
@@ -55,7 +45,6 @@ class NPC:
 		if len(myPieces) == 0:
 			return False, [(-10, -10)]
 		adapKill, chosedMove = self.kill(myPieces, board)
-		#print "adaptKill", adapKill
 		if adapKill > 0:
 			hasKilled = True
 		else:

@@ -138,10 +138,10 @@ while 1:
 
 		#NPC's time to play
 		if turn%2 == 1:
-			print "nokill =", turnNoKill
 			if not sequenceKill:
 				countKills = 0
 				hasKill, path = npc.play(sequenceKill, board)
+				print "path", path
 				#If hasn't any move to do
 				if path[0] == (-10,-10):
 					num_black = 0
