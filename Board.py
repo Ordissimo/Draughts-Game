@@ -1,5 +1,5 @@
 # coding=UTF-8
-import pygame, sys
+import pygame, sys, copy
 from Piece import Piece
 from RedPiece import RedPiece
 from BlackPiece import BlackPiece
@@ -89,11 +89,11 @@ myFont = pygame.font.SysFont("Comic Sans Ms", 36)
 turnText = myFont.render("Turn 1", 1, WHITE_COLOR)
 
 #making my matrix's board
-board = [[0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece(), 0, BlackPiece()], 
-		[BlackPiece(), 0, 0, 0, 0, 0, BlackPiece(), 0],
-		[0, 0, 0, BlackPiece(), 0, BlackPiece(), 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0],
-		[0, BlackPiece(), 0, 0, 0, 0, 0, 0],
+board = [[0, BlackPiece(), 0, BlackPiece(), 0, 0, 0, BlackPiece()], 
+		[BlackPiece(), 0, 0, 0, BlackPiece(), 0, BlackPiece(), 0],
+		[0, 0, 0, 0, 0, BlackPiece(), 0, 0],
+		[0, 0, BlackPiece(), 0, 0, 0, 0, 0],
+		[0, RedPiece(), 0, 0, 0, 0, 0, 0],
 		[RedPiece(), 0, RedPiece(), 0, RedPiece(), 0, RedPiece(), 0],
 		[0, RedPiece(), 0, RedPiece(), 0, RedPiece(), 0, RedPiece()],
 		[RedPiece(), 0, RedPiece(), 0, RedPiece(), 0, RedPiece(), 0]]
@@ -115,6 +115,7 @@ num_black = 12
 num_red = 12
 sequenceKill = False
 countKills = 0
+
 #Game loop
 while 1:
 		
@@ -137,6 +138,7 @@ while 1:
 
 		#NPC's time to play
 		if turn%2 == 1:
+			print "nokill =", turnNoKill
 			if not sequenceKill:
 				countKills = 0
 				hasKill, path = npc.play(sequenceKill, board)
@@ -183,22 +185,20 @@ while 1:
 
 			#It's player time
 			if turn%2 == 0:
-				'''
-					AJEITAR A FUNCAO SEQUENCE KILL PARA O USUARIO
-				'''
 				#clicked on his own piece
 				if isRedTeam(board[line][collum]) and not sequenceKill:
 					player.setSelected(line, collum)
 				#clicked on a empty space
 				elif board[line][collum] == 0:
-					print turnNoKill
+					#Take the current moves to kill
+					if player.selected != None:
+						pastMovesToKill = copy.copy(player.movesOfSelectedToKill)
 					#See if it's a movement spot
 					if player.tryPlay(line, collum):
 						turn += 1
 						sequenceKill = False
 						crown(board, line, collum)
-						print "can kill", player.movesOfSelectedToKill
-						if (line,collum) in player.movesOfSelectedToKill:
+						if (line,collum) in pastMovesToKill:
 							turnNoKill = 0
 						else:
 							turnNoKill += 1
@@ -207,6 +207,7 @@ while 1:
 					if player.selected != None and len(player.selected.canKill(board)) > 0:
 						player.setSelected(player.selected.line, player.selected.collum)
 						sequenceKill = True
+						turnNoKill = 0
 					else:	
 						player.deselect()
 
