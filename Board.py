@@ -1,7 +1,8 @@
 # coding=UTF-8
 import pygame, sys, copy
 from Piece import Piece
-from NPC import NPC 
+from NPC import NPC
+from User import User
 from Player import Player
 from SimplePiece import SimplePiece
 from CrownPiece import CrownPiece
@@ -126,7 +127,7 @@ for i in range(0, 8):
 
 #Making players
 npc = NPC(board)
-player = Player(board)
+user = User(board)
 
 #Variables
 turn = 0
@@ -207,14 +208,14 @@ while 1:
 			if turn%2 == 0:
 				#clicked on his own piece
 				if isRedTeam(board[line][collum]) and not sequenceKill:
-					player.setSelected(line, collum)
+					user.setSelected(line, collum)
 				#clicked on a empty space
 				elif board[line][collum] == 0:
 					#Take the current moves to kill
-					if player.selected != None:
-						pastMovesToKill = copy.copy(player.movesOfSelectedToKill)
+					if user.selected != None:
+						pastMovesToKill = copy.copy(user.movesOfSelectedToKill)
 					#See if it's a movement spot
-					if player.tryPlay(line, collum):
+					if user.tryPlay(line, collum):
 						turn += 1
 						sequenceKill = False
 						crown(board, line, collum)
@@ -223,15 +224,15 @@ while 1:
 							num_black -=1
 						else:
 							turnNoKill += 1
-							player.deselect()
+							user.deselect()
 					#See if the player can kill another piece
-					if player.selected != None and len(player.selected.canKill(board)) > 0:
-						player.setSelected(player.selected.line, player.selected.collum)
+					if user.selected != None and len(user.selected.canKill(board)) > 0:
+						user.setSelected(user.selected.line, user.selected.collum)
 						sequenceKill = True
 						turnNoKill = 0
 						num_black -= 1
 					else:	
-						player.deselect()
+						user.deselect()
 
 					#For print the current turn
 					text = "Turn " + str(turn+1) 
@@ -244,12 +245,12 @@ while 1:
 	screen.blit(Im_board, (75, 75))
 
 	#Draw the outline if someone is selected
-	if player.selected != None:
-		screen.blit(Im_outline_selected, (80+(player.selected.collum*42), 80+(player.selected.line*42)))
-		for i in range(0, len(player.movesOfSelectedToWalk)):
-			screen.blit(Im_outline_possibilities, (80+(player.movesOfSelectedToWalk[i][1]*42), 80+(player.movesOfSelectedToWalk[i][0]*42)))
-		for i in range(0, len(player.movesOfSelectedToKill)):
-			screen.blit(Im_outline_possibilities,  (80+(player.movesOfSelectedToKill[i][1]*42), 80+(player.movesOfSelectedToKill[i][0]*42)))
+	if user.selected != None:
+		screen.blit(Im_outline_selected, (80+(user.selected.collum*42), 80+(user.selected.line*42)))
+		for i in range(0, len(user.movesOfSelectedToWalk)):
+			screen.blit(Im_outline_possibilities, (80+(user.movesOfSelectedToWalk[i][1]*42), 80+(user.movesOfSelectedToWalk[i][0]*42)))
+		for i in range(0, len(user.movesOfSelectedToKill)):
+			screen.blit(Im_outline_possibilities,  (80+(user.movesOfSelectedToKill[i][1]*42), 80+(user.movesOfSelectedToKill[i][0]*42)))
 
 	#Draw my board on the screen
 	for i in range(0, 8):

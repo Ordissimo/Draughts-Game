@@ -1,4 +1,4 @@
-class Player:
+class User:
 
 	#Constructor
 	def __init__(self, board):
@@ -72,4 +72,3 @@ class Player:
 		elif (line, collum) in self.movesOfSelectedToWalk:
 			self.selected.makeMove((line, collum), self.board)
 			return True
-		

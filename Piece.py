@@ -144,6 +144,13 @@ class Piece:
 			path = listPath[index]
 		return adaptation, path
 
+	#return a list of every piece that can eat some enemy's piece
+	def isKiller(self, board):
+		targets = board[self.line][self.collum].canKill(board)
+		if len(targets) == 0:
+			return False
+		return True
+
 	#To move for another place
 	def makeMove(self, destiny, board):
 		#print "destiny", destiny
@@ -153,42 +160,14 @@ class Piece:
 		self.collum = destiny[1]
 		
 
-	#To kill a enemy
-	def makeKill(self, destiny, board):
-		difLine = (destiny[0] - self.line)
-		difCollum = (destiny[1] - self.collum)
-		#A simple piece will be killed
-		if board[self.line][self.collum].kind == "simple":
-			enemyLine = self.line + (difLine/2)
-			enemyCollum = self.collum + (difCollum/2)
-			board[enemyLine][enemyCollum] = 0		
-		#A crown piece will be killed
-		else:
-			difLine = difLine/abs(difLine) 
-			difCollum = difCollum/abs(difCollum)
-			enemyLine = self.line
-			enemyCollum = self.collum
-			crescent = 1
-			if self.line > destiny[0]:
-				crescent = -1
-			for i in range(self.line, destiny[0], crescent):
-				enemyLine += difLine
-				enemyCollum += difCollum
-				if board[enemyLine][enemyCollum] != 0:
-					board[enemyLine][enemyCollum] = 0
-		board[self.line][self.collum].makeMove(destiny, board)
-
-	#return a list of every piece that can eat some enemy's piece
-	def isKiller(self, board):
-		targets = board[self.line][self.collum].canKill(board)
-		if len(targets) == 0:
-			return False
-		return True
-
 	@abstractmethod
 	def canMove(self, board):
 		pass
 
 	@abstractmethod
 	def canKill(self, board):
+		pass
+
+	@abstractmethod
+	def makeKill(self, destiny, board):
 		pass

@@ -106,3 +106,22 @@ class CrownPiece(Piece):
 					break
 
 		return possibleMoves
+
+	#To kill a enemy
+	def makeKill(self, destiny, board):
+		difLine = (destiny[0] - self.line)
+		difCollum = (destiny[1] - self.collum)
+
+		difLine = difLine/abs(difLine) 
+		difCollum = difCollum/abs(difCollum)
+		enemyLine = self.line
+		enemyCollum = self.collum
+		crescent = 1
+		if self.line > destiny[0]:
+			crescent = -1
+		for i in range(self.line, destiny[0], crescent):
+			enemyLine += difLine
+			enemyCollum += difCollum
+			if board[enemyLine][enemyCollum] != 0:
+				board[enemyLine][enemyCollum] = 0
+		board[self.line][self.collum].makeMove(destiny, board)

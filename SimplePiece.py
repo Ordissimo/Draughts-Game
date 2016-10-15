@@ -36,3 +36,14 @@ class SimplePiece(Piece):
 			if self.inBoard(self.line+2,self.collum+2) and board[self.line+2][self.collum+2] == 0:
 				possibleMoves.append((self.line+2, self.collum+2))
 		return possibleMoves
+
+	#To kill a enemy
+	def makeKill(self, destiny, board):
+		difLine = (destiny[0] - self.line)
+		difCollum = (destiny[1] - self.collum)
+
+		enemyLine = self.line + (difLine/2)
+		enemyCollum = self.collum + (difCollum/2)
+		board[enemyLine][enemyCollum] = 0		
+		
+		board[self.line][self.collum].makeMove(destiny, board)
