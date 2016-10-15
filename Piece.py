@@ -25,6 +25,17 @@ class Piece:
 	def getPosition(self):
 		return self.line, self.collum
 
+	#reset the content of valueBoard
+	def resetValueBoard(self):
+		self.valueBoard = [[4, 4, 4, 4, 4, 4, 4, 4],
+						[4, 3, 3, 3, 3, 3, 3, 4],
+						[4, 3, 2, 2, 2, 2, 3, 4],
+						[4, 3, 2, 1, 1, 2, 3, 4],
+						[4, 3, 2, 1, 1, 2, 3, 4],
+						[4, 3, 2, 2, 2, 2, 3, 4],
+						[4, 3, 3, 3, 3, 3, 3, 4],
+						[10, 10, 10, 10, 10, 10, 10, 10]]
+
 	#Definy the piece position on the board
 	def setPosition(self, newLine, newCollum):
 		self.line = newLine
@@ -42,10 +53,16 @@ class Piece:
 			return False
 		return True
 	
+	#See if the piece it's a enemy
+	def isEnemy(self, enemy):
+		if enemy != 0 and enemy.team != self.team:
+			return True
+		return False
+
 	#Choose the best movement
 	def adaptAdvance(self, board):
 		#Initialize variables
-		adaptation = 0
+		adaptation = -100
 		bestMove = [(-1,-1), (-1,-1)]
 		moves = self.canMove(board)
 
@@ -63,7 +80,7 @@ class Piece:
 			newAdaptation = self.valueBoard[ moves[i][0] ][ moves[i][1] ]
 			if moves[i] in allEnemiesKill:
 				newAdaptation += 5
-			elif moves[i] in allEnemiesWalk and newAdaptation < 4: #adaptation > 4 means it on the corner
+			elif moves[i] in allEnemiesWalk and newAdaptation < 4: #adaptation >= 4 means it on the corner
 				newAdaptation += -2
 			#Take the highest adaptation
 			if newAdaptation > adaptation:
@@ -72,7 +89,31 @@ class Piece:
 
 		return adaptation, bestMove
 
+	'''
+		WORKIN HERE NOW.
+	'''
+	#See if it's a good ideia don't move this piece
+	def shouldStay(self, destiny, board):
+		#Another board to make simulations of moves
+		auxBoard = copy.deepcopy(board)
 
+		origin = (self.line, self.collum)
+		auxBoard[self.line][self.collum].makeMove(destiny, auxBoard)
+		for i in range(0, 8):
+			for j in range(0, 8):
+				if auxBoard[i][j] != 0 and auxBoard[i][j].team == "red":
+					allEnemiesKill += auxBoard[i][j].canKill(auxBoard)
+					allEnemiesWalk += board[i][j].canMove(board)
+
+		result = 0
+		if origin[0] == 0:
+			result +=1
+			if origin in allEnemiesWalk:
+				result += 2
+		if origin in allEnemiesKill:
+			result+=2
+		
+		return result
 
 	#Choose the best move to eat most of enemy's piece
 	def adaptKill(self, board):
@@ -95,7 +136,6 @@ class Piece:
 		listPath = []
 		index = 0
 		for i in range(0, len(nextVictims)):
-			#newNode = [(pieceLine, pieceCollum)]
 			auxBoard = copy.deepcopy(board)
 			auxBoard[pieceLine][pieceCollum].makeKill(nextVictims[i], auxBoard)
 			aux, path = self.bestKillerPath(nextVictims[i][0], nextVictims[i][1], adaptation+2, path, auxBoard)
@@ -110,7 +150,7 @@ class Piece:
 
 	#To move for another place
 	def makeMove(self, destiny, board):
-		print "destiny", destiny
+		#print "destiny", destiny
 		board[destiny[0]][destiny[1]] = board[self.line][self.collum]
 		board[self.line][self.collum] = 0
 		self.line = destiny[0]
@@ -125,7 +165,6 @@ class Piece:
 		if board[self.line][self.collum].kind == "simple":
 			enemyLine = self.line + (difLine/2)
 			enemyCollum = self.collum + (difCollum/2)
-			#print enemyLine, enemyCollum
 			board[enemyLine][enemyCollum] = 0		
 		#A crown piece will be killed
 		else:
@@ -139,7 +178,6 @@ class Piece:
 			for i in range(self.line, destiny[0], crescent):
 				enemyLine += difLine
 				enemyCollum += difCollum
-				#print "enemy", enemyLine, enemyCollum
 				if board[enemyLine][enemyCollum] != 0:
 					board[enemyLine][enemyCollum] = 0
 		board[self.line][self.collum].makeMove(destiny, board)
@@ -150,11 +188,6 @@ class Piece:
 		if len(targets) == 0:
 			return False
 		return True
-
-
-	@abstractmethod
-	def isEnemy(self, enemy):
-		pass
 
 	@abstractmethod
 	def canMove(self, board):

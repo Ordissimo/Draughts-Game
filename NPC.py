@@ -17,7 +17,7 @@ class NPC:
 
 	#Choose the next movement
 	def standartMove(self, piecesList, board):
-		adaptation = 0
+		adaptation = -100
 		movement = [(-10, -10), (-10,-10)]
 		for i in range (0, len(piecesList)):
 			newAdaptation, newMovement = self.board[piecesList[i][0]][piecesList[i][1]].adaptAdvance(self.board)
@@ -50,6 +50,6 @@ class NPC:
 		else:
 			if not sequenceMove:
 				adapMove, chosedMove = self.standartMove(myPieces, board)
-				if adapMove == 0:
+				if adapMove == -100:
 					return False, [(-10, -10)]
 		return hasKilled, chosedMove

@@ -1,33 +1,58 @@
 # coding=UTF-8
 import pygame, sys, copy
 from Piece import Piece
-from RedPiece import RedPiece
-from BlackPiece import BlackPiece
-from RedCrownPiece import RedCrownPiece
-from BlackCrownPiece import BlackCrownPiece
 from NPC import NPC 
 from Player import Player
+from SimplePiece import SimplePiece
+from CrownPiece import CrownPiece
 
 pygame.init() #Inicialize pygame
 
+#Team constants
+BLACK_TEAM = "black"
+RED_TEAM = "red"
+
+#Set Constants
+WINDOW_HEIGHT = 500
+WINDOW_WIDTH = 500
+BLACK_COLOR = 0, 0, 0
+WHITE_COLOR = 255, 255, 255
+
+#Load images
+Im_background = pygame.image.load("Images/Madeira.jpg")
+Im_background_rect = Im_background.get_rect()
+Im_board = pygame.image.load("Images/tabuleiro.jpg")
+Im_outline_selected = pygame.image.load("Images/ol.png") #outline = contorno
+Im_outline_possibilities = pygame.image.load("Images/ol2.png")
+Im_red_Piece = pygame.image.load("Images/Peca_vermelha.png")
+Im_black_Piece = pygame.image.load("Images/Peca_preta.png")
+Im_black_crown = pygame.image.load("Images/damaNegra.png")
+Im_red_crown = pygame.image.load("Images/damaVermelha.png")
+
+#Text label
+myFont = pygame.font.SysFont("Comic Sans Ms", 36)
+turnText = myFont.render("Turn 1", 1, WHITE_COLOR)
+
+	
 #The piece is a red one?
 def isRedTeam(somePiece):
-	if somePiece != 0 and somePiece.team == "red":
+	if somePiece != 0 and somePiece.team == RED_TEAM:
 		return True
 	return False
 #The piece is a black one?
 def isBlackTeam(somePiece):
-	if somePiece != 0 and somePiece.team == "black":
+	if somePiece != 0 and somePiece.team == BLACK_TEAM:
 		return True
 	return False
 
 #That piece on the board should be crown?
 def crown(board, line, collum):
-	if line == 7 and isinstance(board[line][collum], BlackPiece):
-		board[line][collum] = BlackCrownPiece()
-	elif line == 0 and isinstance(board[line][collum], RedPiece):
-		board[line][collum] = RedCrownPiece()
-	board[line][collum].setPosition(line, collum)
+	if isinstance(board[line][collum], SimplePiece):
+		if line == 7 and board[line][collum].team == BLACK_TEAM:
+			board[line][collum] = CrownPiece(Im_black_crown, BLACK_TEAM)
+		elif line == 0 and board[line][collum].team == RED_TEAM:
+			board[line][collum] = CrownPiece(Im_red_crown, RED_TEAM)
+		board[line][collum].setPosition(line, collum)
 
 #Print the board
 def printB(board):
@@ -66,37 +91,31 @@ def searchKillers(board, line, collum):
 						listKillers.append((i, j))
 	return listKillers
 
-#Set Constants
-WINDOW_HEIGHT = 500
-WINDOW_WIDTH = 500
-BLACK_COLOR = 0, 0, 0
-WHITE_COLOR = 255, 255, 255
+
+
 
 #Opening a window
 size = (WINDOW_WIDTH , WINDOW_HEIGHT)
 screen = pygame.display.set_mode(size) 
 pygame.display.set_caption("Draught")
 
-#Load images
-Im_background = pygame.image.load("Images/Madeira.jpg")
-Im_background_rect = Im_background.get_rect()
-Im_board = pygame.image.load("Images/tabuleiro.jpg")
-Im_outline_selected = pygame.image.load("Images/ol.png") #outline = contorno
-Im_outline_possibilities = pygame.image.load("Images/ol2.png")
+#Instacing all the pieces
+blackOnes = []
+redOnes = []
+for i in range(0, 12):
+	blackOnes.append( SimplePiece(Im_black_Piece, 1, BLACK_TEAM) )
+	redOnes.append( SimplePiece(Im_red_Piece, -1, RED_TEAM) )
 
-#Text label
-myFont = pygame.font.SysFont("Comic Sans Ms", 36)
-turnText = myFont.render("Turn 1", 1, WHITE_COLOR)
 
 #making my matrix's board
-board = [[0, BlackPiece(), 0, BlackPiece(), 0, 0, 0, BlackPiece()], 
-		[BlackPiece(), 0, 0, 0, BlackPiece(), 0, BlackPiece(), 0],
-		[0, 0, 0, 0, 0, BlackPiece(), 0, 0],
-		[0, 0, BlackPiece(), 0, 0, 0, 0, 0],
-		[0, RedPiece(), 0, 0, 0, 0, 0, 0],
-		[RedPiece(), 0, RedPiece(), 0, RedPiece(), 0, RedPiece(), 0],
-		[0, RedPiece(), 0, RedPiece(), 0, RedPiece(), 0, RedPiece()],
-		[RedPiece(), 0, RedPiece(), 0, RedPiece(), 0, RedPiece(), 0]]
+board = [[0, blackOnes[0], 0, blackOnes[1], 0, blackOnes[2], 0, blackOnes[3]], 
+		[blackOnes[4], 0, blackOnes[5], 0, blackOnes[6], 0, blackOnes[7], 0],
+		[0, blackOnes[8], 0, blackOnes[9], 0, blackOnes[10], 0, blackOnes[11]],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[redOnes[0], 0, redOnes[1], 0, redOnes[2], 0, redOnes[3], 0],
+		[0, redOnes[4], 0, redOnes[5], 0, redOnes[6], 0, redOnes[7]],
+		[redOnes[8], 0, redOnes[9], 0, redOnes[10], 0, redOnes[11], 0]]
 
 #Set their positions
 for i in range(0, 8):
@@ -141,7 +160,7 @@ while 1:
 			if not sequenceKill:
 				countKills = 0
 				hasKill, path = npc.play(sequenceKill, board)
-				print "path", path
+
 				#If hasn't any move to do
 				if path[0] == (-10,-10):
 					num_black = 0
@@ -200,6 +219,7 @@ while 1:
 						crown(board, line, collum)
 						if (line,collum) in pastMovesToKill:
 							turnNoKill = 0
+							num_black -=1
 						else:
 							turnNoKill += 1
 							player.deselect()
@@ -208,6 +228,7 @@ while 1:
 						player.setSelected(player.selected.line, player.selected.collum)
 						sequenceKill = True
 						turnNoKill = 0
+						num_black -= 1
 					else:	
 						player.deselect()
 

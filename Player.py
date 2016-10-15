@@ -52,6 +52,7 @@ class Player:
 					myPiecesPositions.append((i, j))
 		return myPiecesPositions
 
+	#Return if the choosen destiny is valid and if it's true, then make the move
 	def tryPlay(self, line, collum):
 		if self.selected == None:
 			return False
