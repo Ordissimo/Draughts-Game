@@ -2,7 +2,7 @@ from Piece import Piece
 
 class SimplePiece(Piece):
 	def __init__(self, image, orientation, team):
-		Piece.__init__(self, image, "simple", team)
+		Piece.__init__(self, image, team)
 		self.orientation = orientation
 
 	#return all possible position where the piece can be moved

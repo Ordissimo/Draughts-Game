@@ -32,7 +32,6 @@ Im_red_crown = pygame.image.load("Images/damaVermelha.png")
 #Text label
 myFont = pygame.font.SysFont("Comic Sans Ms", 36)
 turnText = myFont.render("Turn 1", 1, WHITE_COLOR)
-
 	
 #The piece is a red one?
 def isRedTeam(somePiece):
@@ -60,14 +59,16 @@ def printB(board):
 		for j in range(0, 8):
 			p = board[i][j]
 			if isinstance(p, Piece):
-				if p.kind == "simple" and p.team == "red":
-					print "r",
-				elif p.kind == "simple" and p.team == "black":
-					print "b",
-				elif p.kind == "crown" and p.team == "red":
-					print "R",
-				elif p.kind == "crown" and p.team == "black":
-					print "B",
+				if isinstance(p, SimplePiece):
+					if p.team == RED_TEAM:
+						print "r",
+					elif p.team == BLACK_TEAM:
+						print "b",
+				elif isinstance(p, SimplePiece):
+					if p.team == RED_TEAM:
+						print "R",
+					elif p.team == BLACK_TEAM:
+						print "B"
 			else:
 				print p,
 		print ""

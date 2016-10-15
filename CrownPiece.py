@@ -2,7 +2,7 @@ from Piece import Piece
 
 class CrownPiece(Piece):
 	def __init__(self, image, team):
-		Piece.__init__(self, image, "crown", team)
+		Piece.__init__(self, image, team)
 
 	#return all possible position where the piece can be moved
 	def canMove(self, board):

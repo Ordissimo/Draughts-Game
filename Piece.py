@@ -6,9 +6,8 @@ import copy
 class Piece:
 	__metaclass__ = ABCMeta
 	#Constructor
-	def __init__(self, image, kind, team):
+	def __init__(self, image, team):
 		self.image = image
-		self.kind = kind
 		self.team = team
 		self.line = -1
 		self.collum = -1
@@ -89,9 +88,6 @@ class Piece:
 
 		return adaptation, bestMove
 
-	'''
-		WORKIN HERE NOW.
-	'''
 	#See if it's a good ideia don't move this piece
 	def shouldStay(self, destiny, board):
 		#Another board to make simulations of moves
