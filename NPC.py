@@ -1,9 +1,11 @@
 from Piece import Piece
+from Player import Player
 import copy
 
-class NPC:
+class NPC(Player):
 	#Constructor
-	def __init__(self, board):
+	def __init__(self, board, piecesVector):
+		super(NPC, self).__init__(board, piecesVector)
 		self.board = board
 
 	#Return every piece of the black team on the board
@@ -38,6 +40,7 @@ class NPC:
 				path = newPath
 		return adaptation, path
 
+	#Override
 	#Function that will chose the best movement
 	def play(self, sequenceMove, board):
 		hasKilled = False

@@ -1,8 +1,10 @@
-class User:
+from Player import Player
+
+class User(Player):
 
 	#Constructor
-	def __init__(self, board):
-		self.board = board
+	def __init__(self, board, piecesVector):
+		super(User, self).__init__(board, piecesVector)
 		self.deselect()
 		self.clicked = None
 
@@ -72,3 +74,7 @@ class User:
 		elif (line, collum) in self.movesOfSelectedToWalk:
 			self.selected.makeMove((line, collum), self.board)
 			return True
+
+	#Override
+	def play():
+		pass;

@@ -126,8 +126,8 @@ for i in range(0, 8):
 			board[i][j].setPosition(i, j)
 
 #Making players
-npc = NPC(board)
-user = User(board)
+npc = NPC(board, blackOnes)
+user = User(board, redOnes)
 
 #Variables
 turn = 0
