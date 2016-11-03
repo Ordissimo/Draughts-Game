@@ -112,17 +112,17 @@ class Piece:
 		return result
 
 	#Choose the best move to eat most of enemy's piece
-	def adaptKill(self, board):
+	def adaptKill(self, enemyPieces, board):
 		victims = board[self.line][self.collum].canKill(board)
 		#See if can't kill
 		if len(victims) == 0:
 			return 0, []
 
-		adapKill, bestPath = self.bestKillerPath(self.line, self.collum, 0, [], copy.deepcopy(board) )
+		adapKill, bestPath = self.bestKillerPath(self.line, self.collum, 0, [], copy.deepcopy(enemyPieces),copy.deepcopy(board) )
 		return adapKill, bestPath
 
 	#Function that should find the best path reached by that piece. RECURSIVE FUNCTION
-	def bestKillerPath(self, pieceLine, pieceCollum, adaptation, path, board):
+	def bestKillerPath(self, pieceLine, pieceCollum, adaptation, path, enemyPieces, board):
 		#print adaptation
 		path.append((pieceLine, pieceCollum))
 		nextVictims = board[pieceLine][pieceCollum].canKill(board)
@@ -133,8 +133,8 @@ class Piece:
 		index = 0
 		for i in range(0, len(nextVictims)):
 			auxBoard = copy.deepcopy(board)
-			auxBoard[pieceLine][pieceCollum].makeKill(nextVictims[i], auxBoard)
-			aux, path = self.bestKillerPath(nextVictims[i][0], nextVictims[i][1], adaptation+2, path, auxBoard)
+			auxBoard[pieceLine][pieceCollum].makeKill(nextVictims[i], enemyPieces, auxBoard)
+			aux, path = self.bestKillerPath(nextVictims[i][0], nextVictims[i][1], adaptation+2, path, enemyPieces, auxBoard)
 			listPath.append(copy.copy(path))
 			path.pop()	
 			if aux > adaptation:
@@ -169,5 +169,5 @@ class Piece:
 		pass
 
 	@abstractmethod
-	def makeKill(self, destiny, board):
+	def makeKill(self, destiny, enemyPieces, board):
 		pass

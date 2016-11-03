@@ -6,23 +6,13 @@ class NPC(Player):
 	#Constructor
 	def __init__(self, board, piecesVector):
 		super(NPC, self).__init__(board, piecesVector)
-		self.board = board
-
-	#Return every piece of the black team on the board
-	def findAllBlack(self):
-		blackPositions = []
-		for i in range(0, 8):
-			for j in range(0, 8):
-				if self.board[i][j] != 0 and self.board[i][j].team == "black":
-					blackPositions.append((i, j))
-		return blackPositions
 
 	#Choose the next movement
 	def standartMove(self, piecesList, board):
 		adaptation = -100
 		movement = [(-10, -10), (-10,-10)]
 		for i in range (0, len(piecesList)):
-			newAdaptation, newMovement = self.board[piecesList[i][0]][piecesList[i][1]].adaptAdvance(self.board)
+			newAdaptation, newMovement = self.board[piecesList[i].line][piecesList[i].collum].adaptAdvance(self.board)
 			if newAdaptation > adaptation:
 				adaptation = newAdaptation
 				movement = newMovement
@@ -34,7 +24,7 @@ class NPC(Player):
 		path = []
 		auxBoard = []
 		for i in range(0, len(piecesList)):
-			newAdaptation, newPath = board[piecesList[i][0]][piecesList[i][1]].adaptKill(board)
+			newAdaptation, newPath = self.board[piecesList[i].line][piecesList[i].collum].adaptKill(self.piecesVector, board)
 			if newAdaptation > adaptation:
 				adaptation = newAdaptation
 				path = newPath
@@ -44,15 +34,14 @@ class NPC(Player):
 	#Function that will chose the best movement
 	def play(self, sequenceMove, board):
 		hasKilled = False
-		myPieces = self.findAllBlack()
-		if len(myPieces) == 0:
-			return False, [(-10, -10)]
-		adapKill, chosedMove = self.kill(myPieces, board)
+		#if len(myPieces) == 0:
+		#	return False, [(-10, -10)]
+		adapKill, chosedMove = self.kill(self.piecesVector, board)
 		if adapKill > 0:
 			hasKilled = True
 		else:
 			if not sequenceMove:
-				adapMove, chosedMove = self.standartMove(myPieces, board)
+				adapMove, chosedMove = self.standartMove(self.piecesVector, board)
 				if adapMove == -100:
 					return False, [(-10, -10)]
 		return hasKilled, chosedMove

@@ -55,12 +55,12 @@ class User(Player):
 		return myPiecesPositions
 
 	#Return if the choosen destiny is valid, so if it's true, then make the move
-	def tryPlay(self, line, collum):
+	def tryPlay(self, line, collum, enemyPieces):
 		if self.selected == None:
 			return False
 		#See if the destiny is reached by killing
 		if (line, collum) in self.movesOfSelectedToKill:
-			self.selected.makeKill((line,collum), self.board)
+			self.selected.makeKill((line,collum), enemyPieces, self.board)
 
 			#Seeing if the piece can kill another one
 			self.movesOfSelectedToKill = self.selected.canKill( self.board )

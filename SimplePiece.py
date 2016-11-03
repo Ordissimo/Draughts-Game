@@ -38,12 +38,18 @@ class SimplePiece(Piece):
 		return possibleMoves
 
 	#To kill a enemy
-	def makeKill(self, destiny, board):
+	def makeKill(self, destiny, enemyPieces, board):
 		difLine = (destiny[0] - self.line)
 		difCollum = (destiny[1] - self.collum)
 
 		enemyLine = self.line + (difLine/2)
 		enemyCollum = self.collum + (difCollum/2)
-		board[enemyLine][enemyCollum] = 0		
+		board[enemyLine][enemyCollum] = 0
+
+		for i in range(len(enemyPieces)):
+			enemy = enemyPieces[i]
+			if enemy.line == enemyLine and enemy.collum == enemyCollum:
+				del enemyPieces[i]
+				break
 		
 		board[self.line][self.collum].makeMove(destiny, board)

@@ -183,7 +183,7 @@ while 1:
 				#print path
 				countKills += 1
 				if countKills < len(path):
-					board[path[countKills-1][0]][path[countKills-1][1]].makeKill(path[countKills], board)
+					board[path[countKills-1][0]][path[countKills-1][1]].makeKill(path[countKills], redOnes, board)
 				else:
 					sequenceKill = False
 					num_red -= len(path)-1
@@ -194,6 +194,8 @@ while 1:
 		
 		#When click
 		if event.type == pygame.MOUSEBUTTONDOWN: 
+			print ("black: %d red: %d")%(len(blackOnes), len(redOnes))
+
 			#Get board position of the click
 			x, y = event.pos
 			collum = int(round((x-80)/42))
@@ -215,7 +217,7 @@ while 1:
 					if user.selected != None:
 						pastMovesToKill = copy.copy(user.movesOfSelectedToKill)
 					#See if it's a movement spot
-					if user.tryPlay(line, collum):
+					if user.tryPlay(line, collum, blackOnes):
 						turn += 1
 						sequenceKill = False
 						crown(board, line, collum)
