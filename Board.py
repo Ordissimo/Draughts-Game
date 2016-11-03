@@ -132,10 +132,7 @@ user = User(board, redOnes)
 #Variables
 turn = 0
 turnNoKill = 0
-num_black = 12
-num_red = 12
 sequenceKill = False
-countKills = 0
 
 #Game loop
 while 1:
@@ -147,10 +144,10 @@ while 1:
 			sys.exit()
 
 		#Winner's conditions
-		if num_red == 0:
+		if len(redOnes) == 0:
 			turnText = turnText = myFont.render("Player BLACK wins!!!", 1, BLACK_COLOR)
 			break
-		elif num_black == 0:
+		elif len(blackOnes) == 0:
 			turnText = turnText = myFont.render("Player RED wins!!!", 1, (255, 0, 0))
 			break
 		elif turnNoKill >= 20:
@@ -159,13 +156,13 @@ while 1:
 
 		#NPC's time to play
 		if turn%2 == 1:
+			#if it's the first time eating
 			if not sequenceKill:
-				countKills = 0
 				hasKill, path = npc.play(sequenceKill, board)
 
 				#If hasn't any move to do
 				if path[0] == (-10,-10):
-					num_black = 0
+					blackOnes = [];
 					break
 
 				if not hasKill:
@@ -181,15 +178,14 @@ while 1:
 					sequenceKill = True
 			else:
 				#print path
-				countKills += 1
-				if countKills < len(path):
-					board[path[countKills-1][0]][path[countKills-1][1]].makeKill(path[countKills], redOnes, board)
+				if len(path) > 1:
+					board[path[0][0]][path[0][1]].makeKill(path[1], redOnes, board)
+					del path[0]
 				else:
 					sequenceKill = False
-					num_red -= len(path)-1
 					turnNoKill = 0
 					turn += 1
-					crown(board, path[countKills-1][0], path[countKills-1][1])
+					crown(board, path[0][0], path[0][1])
 				
 		
 		#When click
@@ -223,7 +219,6 @@ while 1:
 						crown(board, line, collum)
 						if (line,collum) in pastMovesToKill:
 							turnNoKill = 0
-							num_black -=1
 						else:
 							turnNoKill += 1
 							user.deselect()
@@ -232,7 +227,6 @@ while 1:
 						user.setSelected(user.selected.line, user.selected.collum)
 						sequenceKill = True
 						turnNoKill = 0
-						num_black -= 1
 					else:	
 						user.deselect()
 
