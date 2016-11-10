@@ -153,7 +153,6 @@ class Piece:
 
 	#To move for another place
 	def makeMove(self, destiny, board):
-		#print "destiny", destiny
 		board[destiny[0]][destiny[1]] = board[self.line][self.collum]
 		board[self.line][self.collum] = 0
 		self.line = destiny[0]

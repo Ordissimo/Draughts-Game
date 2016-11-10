@@ -34,8 +34,6 @@ class NPC(Player):
 	#Function that will chose the best movement
 	def play(self, sequenceMove, board):
 		hasKilled = False
-		#if len(myPieces) == 0:
-		#	return False, [(-10, -10)]
 		adapKill, chosedMove = self.kill(self.piecesVector, board)
 		if adapKill > 0:
 			hasKilled = True
