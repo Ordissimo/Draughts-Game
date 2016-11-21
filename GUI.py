@@ -9,11 +9,6 @@ def drawPieces():
 			if gameBoard.board[i][j] != 0:
 				gameBoard.board[i][j].draw(screen)
 
-def drawTurnText(turn):
-	#For print the current turn
-	text = "Turn " + str(turn) 
-	turnText = myFont.render(text, 1, WHITE_COLOR)
-
 #Draw the outline if someone is selected
 def drawOutline():
 	if gameBoard.user.selected != None:
@@ -30,6 +25,7 @@ def drawBoard():
 	screen.fill(BLACK_COLOR)
 	screen.blit(Im_background, Im_background_rect)
 	screen.blit(turnText, (5, WINDOW_HEIGHT - 36))
+	screen.blit(winText, (150, WINDOW_HEIGHT - 36))
 	screen.blit(Im_board, (75, 75))
 
 pygame.init() #Inicialize pygame
@@ -54,6 +50,7 @@ Im_red_crown = pygame.image.load("Images/damaVermelha.png")
 #Text label
 myFont = pygame.font.SysFont("Comic Sans Ms", 36)
 turnText = myFont.render("", 1, WHITE_COLOR)
+winText = myFont.render("", 1, WHITE_COLOR)
 
 #Opening a window
 size = (WINDOW_WIDTH , WINDOW_HEIGHT)
@@ -76,11 +73,11 @@ while 1:
 		#See if someone win
 		if gameBoard.winConditions() > 0:
 			if gameBoard.winConditions() == 1:
-				turnText = myFont.render("Player BLACK wins!!!", 1, BLACK_COLOR)
+				winText = myFont.render("Player BLACK wins!!!", 1, BLACK_COLOR)
 			elif gameBoard.winConditions() == 2:
-				turnText = myFont.render("Player RED wins!!!", 1, (255, 0, 0))
+				winText = myFont.render("Player RED wins!!!", 1, (255, 0, 0))
 			else:
-				turnText = turnText = myFont.render("We have a Draw...", 1, (150, 150, 150))
+				winText = myFont.render("We have a Draw...", 1, (150, 150, 150))
 
 		#NPC's time to play
 		if gameBoard.turn % 2 == 0:

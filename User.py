@@ -45,24 +45,13 @@ class User(Player):
 						listKillers.append((i, j))
 		return listKillers
 
-	#Return every piece of that team on the board
-	def findAllMyPieces(self, team):
-		myPiecesPositions = []
-		for i in range(0, 8):
-			for j in range(0, 8):
-				if self.board[i][j] != 0 and self.board[i][j].team == team:
-					myPiecesPositions.append((i, j))
-		return myPiecesPositions
-
 	#Return if the choosen destiny is valid, so if it's true, then make the move
 	def tryPlay(self, line, collum, enemyPieces):
-		if self.selected == None:
-			return False
 		#See if the destiny is reached by killing
 		if (line, collum) in self.movesOfSelectedToKill:
 			self.selected.makeKill((line,collum), enemyPieces, self.board)
 
-			#Seeing if the piece can kill another one
+			#See if the piece can kill another one
 			self.movesOfSelectedToKill = self.selected.canKill( self.board )
 			if len(self.movesOfSelectedToKill) != 0:
 				self.selected.line = line
@@ -76,5 +65,19 @@ class User(Player):
 			return True
 
 	#Override
-	def play():
-		pass;
+	def play(self, line, collum, enemyPieces):
+		
+		#See if the destiny is reached by moving 
+		if (line, collum) in self.movesOfSelectedToWalk:
+			self.selected.makeMove((line, collum), self.board)
+
+		#See if the destiny is reached by killing
+		elif (line, collum) in self.movesOfSelectedToKill:
+			self.selected.makeKill((line,collum), enemyPieces, self.board)
+		self.deselect()
+		'''
+			2. Save the movement.
+		'''
+
+			
+		
