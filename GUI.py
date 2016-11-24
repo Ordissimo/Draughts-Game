@@ -61,6 +61,8 @@ pygame.display.set_caption("Draught")
 gameBoard = Board(Im_black_piece, Im_black_crown, Im_red_piece, Im_red_crown)
 gameBoard.resetBoard()
 
+gameOver = False
+
 #Game loop
 while 1:
 		
@@ -70,34 +72,38 @@ while 1:
 		if event.type == pygame.QUIT:
 			sys.exit()
 
-		#See if someone win
-		if gameBoard.winConditions() > 0:
-			if gameBoard.winConditions() == 1:
-				winText = myFont.render("Player BLACK wins!!!", 1, BLACK_COLOR)
-			elif gameBoard.winConditions() == 2:
-				winText = myFont.render("Player RED wins!!!", 1, (255, 0, 0))
-			else:
-				winText = myFont.render("We have a Draw...", 1, (150, 150, 150))
+		if not gameOver:
+			#See if someone win
+			if gameBoard.winConditions() > 0:
+				gameOver = True
+				if gameBoard.winConditions() == 1:
+					gameBoard.npc.close(1)
+					winText = myFont.render("Player BLACK wins!!!", 1, BLACK_COLOR)
+				elif gameBoard.winConditions() == 2:
+					gameBoard.npc.close(2)
+					winText = myFont.render("Player RED wins!!!", 1, (255, 0, 0))
+				else:
+					winText = myFont.render("We have a Draw...", 1, (150, 150, 150))
+		
+			#NPC's time to play
+			if gameBoard.turn % 2 == 0:
+				gameBoard.NPCTime()
+					
+			#When click
+			if event.type == pygame.MOUSEBUTTONDOWN: 
+				#Get board position of the click
+				x, y = event.pos
+				collum = int(round((x-80)/42))
+				line = int(round((y-80)/42))
 
-		#NPC's time to play
-		if gameBoard.turn % 2 == 0:
-			gameBoard.NPCTime()
-				
-		#When click
-		if event.type == pygame.MOUSEBUTTONDOWN: 
-			#Get board position of the click
-			x, y = event.pos
-			collum = int(round((x-80)/42))
-			line = int(round((y-80)/42))
+				#If the click was out of the board
+				if collum < 0 or collum >= 8 or line < 0 or line >= 8:
+					print "out of range"
+					break;
 
-			#If the click was out of the board
-			if collum < 0 or collum >= 8 or line < 0 or line >= 8:
-				print "out of range"
-				break;
-
-			#It's user time
-			if gameBoard.turn%2 == 1:
-				gameBoard.playerTime(line, collum)
+				#It's user time
+				if gameBoard.turn%2 == 1:
+					gameBoard.playerTime(line, collum)
 		
 	#Drawing
 	text = "Turn " + str(gameBoard.turn) 

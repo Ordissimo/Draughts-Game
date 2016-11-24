@@ -26,6 +26,7 @@ class Board:
 
 		self.images = [Im_black_piece, Im_black_crown, Im_red_piece, Im_red_crown]
 
+	#Reset the board to the default state
 	def resetBoard(self):
 		for i in range(0, 12):
 			self.blackOnes.append( SimplePiece(self.images[0], 1, self.BLACK_TEAM) )
@@ -48,10 +49,11 @@ class Board:
 				if self.board[i][j] != 0:
 					self.board[i][j].setPosition(i, j)
 
-
+	#Make the npc play
 	def NPCTime(self):
+		#print ("Size of the lists:\n  black: %d\n  red: %d) % (len(self.blackOnes), len(self.redOnes))
 		#get best path and if had some kill;
-		hasKill, path = self.npc.play(self.board)
+		hasKill, path = self.npc.play(self.getState(), self.board)
 
 		#If hasn't any move to do
 		if path[0] == (-10,-10):
@@ -74,6 +76,7 @@ class Board:
 		self.turn += 1
 		self.crown(path[0][0], path[0][1])
 
+	#Let the user play
 	def playerTime(self, clickedLine, clickedCollum):
 		#clicked on his own piece
 		if self.isRedTeam(self.board[clickedLine][clickedCollum]) and not self.sequenceKill:
@@ -128,27 +131,33 @@ class Board:
 	def crown(self, line, collum):
 		if isinstance(self.board[line][collum], SimplePiece):
 			if line == 7 and self.board[line][collum].team == self.BLACK_TEAM:
-				self.board[line][collum] = CrownPiece(self.images[1], self.BLACK_TEAM)
+				index = self.npc.findPiece(line, collum)
+				self.blackOnes[index] = CrownPiece(self.images[1], self.BLACK_TEAM)
+				self.board[line][collum] = self.blackOnes[index]
+				
 			elif line == 0 and self.board[line][collum].team == self.RED_TEAM:
-				self.board[line][collum] = CrownPiece(self.images[3], self.RED_TEAM)
+				index = self.user.findPiece(line, collum)
+				self.redOnes[index] = CrownPiece(self.images[3], self.RED_TEAM)
+				self.board[line][collum] = self.redOnes[index]
 			self.board[line][collum].setPosition(line, collum)
 
-	#Print the board
-	def printB(self):
+	#Get the board
+	def getState(self):
+		state = ""
 		for i in range(0, 8):
 			for j in range(0, 8):
 				p = self.board[i][j]
 				if isinstance(p, Piece):
 					if isinstance(p, SimplePiece):
 						if p.team == self.RED_TEAM:
-							print "r",
+							state = state + "r "
 						elif p.team == self.BLACK_TEAM:
-							print "b",
-					elif isinstance(p, SimplePiece):
+							state = state + "b "
+					elif isinstance(p, CrownPiece):
 						if p.team == self.RED_TEAM:
-							print "R",
+							state = state + "R "
 						elif p.team == self.BLACK_TEAM:
-							print "B"
+							state = state + "B "
 				else:
-					print p,
-			print ""
+					state = state + "# "
+		return state
