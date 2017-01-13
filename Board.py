@@ -32,21 +32,21 @@ class Board:
 			self.blackOnes.append( SimplePiece(self.images[0], 1, self.BLACK_TEAM) )
 			self.redOnes.append( SimplePiece(self.images[2], -1, self.RED_TEAM) )
 		#making my matrix's board
-		self.board = [[0, self.blackOnes[0], 0, self.blackOnes[1], 0, self.blackOnes[2], 0, self.blackOnes[3]], 
-					[self.blackOnes[4], 0, self.blackOnes[5], 0, self.blackOnes[6], 0, self.blackOnes[7], 0],
-					[0, self.blackOnes[8], 0, self.blackOnes[9], 0, self.blackOnes[10], 0, self.blackOnes[11]],
-					[0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0],
-					[self.redOnes[0], 0, self.redOnes[1], 0, self.redOnes[2], 0, self.redOnes[3], 0],
-					[0, self.redOnes[4], 0, self.redOnes[5], 0, self.redOnes[6], 0, self.redOnes[7]],
-					[self.redOnes[8], 0, self.redOnes[9], 0, self.redOnes[10], 0, self.redOnes[11], 0]]
+		self.board = [[None, self.blackOnes[0], None, self.blackOnes[1], None, self.blackOnes[2], None, self.blackOnes[3]], 
+					[self.blackOnes[4], None, self.blackOnes[5], None, self.blackOnes[6], None, self.blackOnes[7], None],
+					[None, self.blackOnes[8], None, self.blackOnes[9], None, self.blackOnes[10], None, self.blackOnes[11]],
+					[None, None, None, None, None, None, None, None],
+					[None, None, None, None, None, None, None, None],
+					[self.redOnes[0], None, self.redOnes[1], None, self.redOnes[2], None, self.redOnes[3], None],
+					[None, self.redOnes[4], None, self.redOnes[5], None, self.redOnes[6], None, self.redOnes[7]],
+					[self.redOnes[8], None, self.redOnes[9], None, self.redOnes[10], None, self.redOnes[11], None]]
 
 		self.npc.board = self.board
 		self.user.board = self.board
 		#Set their positions
 		for i in range(0, 8):
 			for j in range(0, 8):
-				if self.board[i][j] != 0:
+				if self.board[i][j] != None:
 					self.board[i][j].setPosition(i, j)
 
 	#Make the npc play
@@ -63,7 +63,7 @@ class Board:
 		pygame.time.wait(1000) #wait 1 sec
 		#kill and sequence kill.
 		if hasKill:
-			while len(path) >=2:				
+			while len(path) >= 2:				
 				self.board[path[0][0]][path[0][1]].makeKill(path[1], self.redOnes, self.board)
 				del path[0]
 			self.turnNoKill = 0
@@ -78,12 +78,13 @@ class Board:
 
 	#Let the user play
 	def playerTime(self, clickedLine, clickedCollum):
+		print self.board[clickedLine][clickedCollum]
 		#clicked on his own piece
 		if self.isRedTeam(self.board[clickedLine][clickedCollum]) and not self.sequenceKill:
 			self.user.setSelected(clickedLine, clickedCollum)
+		
 		#clicked on a empty space
-		elif self.board[clickedLine][clickedCollum] == 0 and self.user.selected != None:
-
+		elif self.board[clickedLine][clickedCollum] == None and self.user.selected != None:
 			#See if the selected destination is to walk.
 			if (clickedLine, clickedCollum) in self.user.movesOfSelectedToWalk:
 				self.turnNoKill +=1
@@ -118,12 +119,12 @@ class Board:
 
 	#The piece is a red one?
 	def isRedTeam(self, somePiece):
-		if somePiece != 0 and somePiece.team == self.RED_TEAM:
+		if somePiece != None and somePiece.team == self.RED_TEAM:
 			return True
 		return False
 	#The piece is a black one?
 	def isBlackTeam(self, somePiece):
-		if somePiece != 0 and somePiece.team == self.BLACK_TEAM:
+		if somePiece != None and somePiece.team == self.BLACK_TEAM:
 			return True
 		return False
 

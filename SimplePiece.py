@@ -9,11 +9,12 @@ class SimplePiece(Piece):
 	def canMove(self, board):
 		possibleMoves = []
 		#up-lef
-		if self.inBoard(self.line + self.orientation, self.collum-1) and board[self.line + self.orientation][self.collum-1] == 0:
+		if self.inBoard(self.line + self.orientation, self.collum-1) and board[self.line + self.orientation][self.collum-1] == None:
 			possibleMoves.append((self.line+ self.orientation, self.collum-1))
 		#up-right
-		if self.inBoard(self.line + self.orientation,self.collum+1) and board[self.line + self.orientation][self.collum+1] == 0:
+		if self.inBoard(self.line + self.orientation,self.collum+1) and board[self.line + self.orientation][self.collum+1] == None:
 			possibleMoves.append((self.line+ self.orientation, self.collum+1))
+
 		return possibleMoves
 
 	#Return all possible position where a enemy's piece will be killed
@@ -21,19 +22,19 @@ class SimplePiece(Piece):
 		possibleMoves = []
 		#up-left
 		if self.inBoard(self.line-1, self.collum-1) and self.isEnemy(board[self.line-1][self.collum-1]):
-			if self.inBoard(self.line-2, self.collum-2) and board[self.line-2][self.collum-2] == 0:
+			if self.inBoard(self.line-2, self.collum-2) and board[self.line-2][self.collum-2] == None:
 				possibleMoves.append((self.line-2, self.collum-2))
 		#up-right
 		if self.inBoard(self.line-1, self.collum+1) and self.isEnemy(board[self.line-1][self.collum+1]):
-			if self.inBoard(self.line-2, self.collum+2) and board[self.line-2][self.collum+2] == 0:
+			if self.inBoard(self.line-2, self.collum+2) and board[self.line-2][self.collum+2] == None:
 				possibleMoves.append((self.line-2, self.collum+2))
 		#down-left
 		if self.inBoard(self.line+1,self.collum-1) and self.isEnemy(board[self.line+1][self.collum-1]):
-			if self.inBoard(self.line+2,self.collum-2) and board[self.line+2][self.collum-2] == 0:
+			if self.inBoard(self.line+2,self.collum-2) and board[self.line+2][self.collum-2] == None:
 				possibleMoves.append((self.line+2, self.collum-2))
 		#down-right
 		if self.inBoard(self.line+1,self.collum+1) and self.isEnemy(board[self.line+1][self.collum+1]):
-			if self.inBoard(self.line+2,self.collum+2) and board[self.line+2][self.collum+2] == 0:
+			if self.inBoard(self.line+2,self.collum+2) and board[self.line+2][self.collum+2] == None:
 				possibleMoves.append((self.line+2, self.collum+2))
 		return possibleMoves
 
@@ -46,7 +47,7 @@ class SimplePiece(Piece):
 		#Killing the enemy
 		enemyLine = self.line + (difLine/2)
 		enemyCollum = self.collum + (difCollum/2)
-		board[enemyLine][enemyCollum] = 0
+		board[enemyLine][enemyCollum] = None
 		for i in range(len(enemyPieces)):
 			enemy = enemyPieces[i]
 			if enemy.line == enemyLine and enemy.collum == enemyCollum:

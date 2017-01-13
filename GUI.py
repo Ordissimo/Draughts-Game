@@ -6,7 +6,7 @@ from Board import Board
 def drawPieces():	
 	for i in range(0, 8):
 		for j in range(0, 8):
-			if gameBoard.board[i][j] != 0:
+			if gameBoard.board[i][j] != None:
 				gameBoard.board[i][j].draw(screen)
 
 #Draw the outline if someone is selected

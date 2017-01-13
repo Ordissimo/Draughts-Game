@@ -54,7 +54,9 @@ class Piece:
 	
 	#See if the piece it's a enemy
 	def isEnemy(self, enemy):
-		if enemy != 0 and enemy.team != self.team:
+		if enemy == 0:
+			print "position [%d %d] is 0" 
+		if enemy != None and enemy.team != self.team:
 			return True
 		return False
 
@@ -70,7 +72,7 @@ class Piece:
 		allEnemiesKill = []
 		for i in range(0, 8):
 			for j in range(0, 8):
-				if board[i][j] != 0 and board[i][j].team == "red":
+				if board[i][j] != None and board[i][j].team == "red":
 					allEnemiesWalk += board[i][j].canMove(board)
 					allEnemiesKill += board[i][j].canKill(board)
 
@@ -97,7 +99,7 @@ class Piece:
 		auxBoard[self.line][self.collum].makeMove(destiny, auxBoard)
 		for i in range(0, 8):
 			for j in range(0, 8):
-				if auxBoard[i][j] != 0 and auxBoard[i][j].team == "red":
+				if auxBoard[i][j] != None and auxBoard[i][j].team == "red":
 					allEnemiesKill += auxBoard[i][j].canKill(auxBoard)
 					allEnemiesWalk += board[i][j].canMove(board)
 
@@ -154,7 +156,7 @@ class Piece:
 	#To move for another place
 	def makeMove(self, destiny, board):
 		board[destiny[0]][destiny[1]] = board[self.line][self.collum]
-		board[self.line][self.collum] = 0
+		board[self.line][self.collum] = None
 		self.line = destiny[0]
 		self.collum = destiny[1]
 		

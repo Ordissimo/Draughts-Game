@@ -11,7 +11,7 @@ class CrownPiece(Piece):
 		j = self.collum
 		for i in range(self.line+1, 8):
 			j += 1
-			if self.inBoard(i, j) and board[i][j]== 0:
+			if self.inBoard(i, j) and board[i][j]== None:
 				possibleMoves.append((i, j))
 			else:
 				break
@@ -19,7 +19,7 @@ class CrownPiece(Piece):
 		j = self.collum
 		for i in range(self.line+1, 8):
 			j -= 1
-			if self.inBoard(i, j) and board[i][j]== 0:
+			if self.inBoard(i, j) and board[i][j]== None:
 				possibleMoves.append((i, j))
 			else:
 				break
@@ -27,7 +27,7 @@ class CrownPiece(Piece):
 		j = self.collum
 		for i in range(self.line-1, -1, -1):
 			j += 1
-			if self.inBoard(i, j) and board[i][j]== 0:
+			if self.inBoard(i, j) and board[i][j]== None:
 				possibleMoves.append((i, j))
 			else:
 				break
@@ -35,7 +35,7 @@ class CrownPiece(Piece):
 		j = self.collum
 		for i in range(self.line-1, -1, -1):
 			j -= 1
-			if self.inBoard(i, j) and board[i][j]== 0:
+			if self.inBoard(i, j) and board[i][j]== None:
 				possibleMoves.append((i, j))
 			else:
 				break	
@@ -50,11 +50,11 @@ class CrownPiece(Piece):
 		for i in range(self.line+1, 8):
 			j += 1
 			if firstEnemy:
-				if self.inBoard(i, j) and board[i][j]== 0:
+				if self.inBoard(i, j) and board[i][j]== None:
 					possibleMoves.append((i, j))
 				else:
 					break
-			if (not firstEnemy) and self.inBoard(i, j) and board[i][j] != 0:
+			if (not firstEnemy) and self.inBoard(i, j) and board[i][j] != None:
 				if self.isEnemy(board[i][j]):
 					firstEnemy = True
 				else: 
@@ -65,11 +65,11 @@ class CrownPiece(Piece):
 		for i in range(self.line+1, 8):
 			j -= 1
 			if firstEnemy:
-				if self.inBoard(i, j) and board[i][j]== 0:
+				if self.inBoard(i, j) and board[i][j]== None:
 					possibleMoves.append((i, j))
 				else:
 					break
-			if (not firstEnemy) and self.inBoard(i, j) and board[i][j] != 0:
+			if (not firstEnemy) and self.inBoard(i, j) and board[i][j] != None:
 				if self.isEnemy(board[i][j]):
 					firstEnemy = True
 				else: 
@@ -80,11 +80,11 @@ class CrownPiece(Piece):
 		for i in range(self.line-1, -1, -1):
 			j += 1
 			if firstEnemy:
-				if self.inBoard(i, j) and board[i][j]== 0:
+				if self.inBoard(i, j) and board[i][j]== None:
 					possibleMoves.append((i, j))
 				else:
 					break
-			if (not firstEnemy) and self.inBoard(i, j) and board[i][j] != 0:
+			if (not firstEnemy) and self.inBoard(i, j) and board[i][j] != None:
 				if self.isEnemy(board[i][j]):
 					firstEnemy = True
 				else: 
@@ -95,11 +95,11 @@ class CrownPiece(Piece):
 		for i in range(self.line-1, -1, -1):
 			j -= 1
 			if firstEnemy:
-				if self.inBoard(i, j) and board[i][j]== 0:
+				if self.inBoard(i, j) and board[i][j]== None:
 					possibleMoves.append((i, j))
 				else:
 					break
-			if (not firstEnemy) and self.inBoard(i, j) and board[i][j] != 0:
+			if (not firstEnemy) and self.inBoard(i, j) and board[i][j] != None:
 				if self.isEnemy(board[i][j]):
 					firstEnemy = True
 				else: 
@@ -122,8 +122,8 @@ class CrownPiece(Piece):
 		for i in range(self.line, destiny[0], crescent):
 			enemyLine += difLine
 			enemyCollum += difCollum
-			if board[enemyLine][enemyCollum] != 0:
-				board[enemyLine][enemyCollum] = 0
+			if board[enemyLine][enemyCollum] != None:
+				board[enemyLine][enemyCollum] = None
 				for i in range(len(enemyPieces)):
 					enemy = enemyPieces[i]
 					if enemy.line == enemyLine and enemy.collum == enemyCollum:

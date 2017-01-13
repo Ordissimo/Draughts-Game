@@ -39,7 +39,7 @@ class User(Player):
 		listKillers = []
 		for i in range(0, 8):
 			for j in range(0, 8):
-				if self.board[i][j] != 0 and self.board[i][j].team == "red":
+				if self.board[i][j] != None and self.board[i][j].team == "red":
 					targets = self.board[i][j].canKill(self.board)
 					if len(targets) != 0:
 						listKillers.append((i, j))
@@ -66,7 +66,7 @@ class User(Player):
 
 	#Override
 	def play(self, line, collum, enemyPieces):
-		
+		print line, collum
 		#See if the destiny is reached by moving 
 		if (line, collum) in self.movesOfSelectedToWalk:
 			self.selected.makeMove((line, collum), self.board)

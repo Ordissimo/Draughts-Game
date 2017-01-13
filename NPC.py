@@ -41,6 +41,9 @@ class NPC(Player):
 	#Override
 	#Function that will chose the best movement
 	def play(self, currentState, board):
+		
+		self.recordCount += 1
+		print "recording " + str(self.recordCount)
 		'''
 		4. Describe the algorithm and use it.
 			search for every state like the one we are.
@@ -50,9 +53,6 @@ class NPC(Player):
 				if not
 					choose a new movement to do.
 		'''
-		self.recordCount += 1
-		print "recording " + str(self.recordCount)
-
 		self.gameStates.append(currentState)
 		self.searchCurrentState(currentState)
 
