@@ -104,7 +104,7 @@ while 1:
 
 				#It's user time
 				if gameBoard.turn%2 == 1:
-					gameBoard.playerTime(line, collum)
+					gameBoard.userTime(line, collum)
 		
 	#Drawing
 	text = "Turn " + str(gameBoard.turn) 

@@ -13,10 +13,10 @@ class NPC(Player):
 	def __init__(self, board, piecesVector):
 		super(NPC, self).__init__(board, piecesVector)
 		# Find and load the database.
-		self.db = open("database.txt", "r")  
-		self.dbContent = self.db.readlines()
+		db = open("database.txt", "r")  
+		self.dbContent = db.readlines()
 		self.gameStates = []
-		self.db.close()
+		db.close()
 		
 		self.dbMatrix = []
 		self.dbMatrix.append([])
@@ -254,13 +254,13 @@ class NPC(Player):
 			self.gameStates[i].winner = winner
 
 		# Saving this game in the database.
-		self.db = open ("database.txt", "w")
+		db = open ("database.txt", "w")
 		content = []
 		for s in self.gameStates:
 			content.append(s.state + "\n")
 			content.append(str(s.movement) + "\n")
 			content.append(str(s.winner) + "\n")
 		content.append("\n")
-		self.db.writelines(content + self.dbContent)
-		self.db.close()
+		db.writelines(content + self.dbContent)
+		db.close()
 

@@ -86,7 +86,20 @@ class Board:
 		self.crown(path[0][0], path[0][1])
 
 	#Let the user play
-	def playerTime(self, clickedLine, clickedCollum):
+	def userTime(self, clickedLine, clickedCollum):
+		# See if has any movement to do.
+		hasMovements = False
+		for piece in self.user.piecesVector:
+			if len( piece.canKill(self.board) ) > 0:
+				hasMovements = True
+				break
+			elif len( piece.canMove(self.board) ) > 0:
+				hasMovements = True
+				break
+		if not hasMovements:
+			self.user.piecesVector = []
+			return
+
 		#clicked on his own piece
 		if self.isRedTeam(self.board[clickedLine][clickedCollum]) and not self.sequenceKill:
 			self.user.setSelected(clickedLine, clickedCollum)
