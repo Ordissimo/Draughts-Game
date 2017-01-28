@@ -54,8 +54,6 @@ class Piece:
 	
 	#See if the piece it's a enemy
 	def isEnemy(self, enemy):
-		if enemy == 0:
-			print "position [%d %d] is 0" 
 		if enemy != None and enemy.team != self.team:
 			return True
 		return False

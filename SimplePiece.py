@@ -8,10 +8,10 @@ class SimplePiece(Piece):
 	#return all possible position where the piece can be moved
 	def canMove(self, board):
 		possibleMoves = []
-		#up-lef
+		#up-lef or down-left
 		if self.inBoard(self.line + self.orientation, self.collum-1) and board[self.line + self.orientation][self.collum-1] == None:
 			possibleMoves.append((self.line+ self.orientation, self.collum-1))
-		#up-right
+		#up-right or down-right
 		if self.inBoard(self.line + self.orientation,self.collum+1) and board[self.line + self.orientation][self.collum+1] == None:
 			possibleMoves.append((self.line+ self.orientation, self.collum+1))
 
@@ -54,3 +54,4 @@ class SimplePiece(Piece):
 				del enemyPieces[i]
 				break
 		board[self.line][self.collum].makeMove(destiny, board)
+		

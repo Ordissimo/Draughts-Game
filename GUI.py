@@ -74,13 +74,14 @@ while 1:
 
 		if not gameOver:
 			#See if someone win
-			if gameBoard.winConditions() > 0:
+			winner = gameBoard.winConditions();
+			if winner > 0:
 				gameOver = True
-				if gameBoard.winConditions() == 1:
-					gameBoard.npc.close(1)
+				if winner == 1:
+					gameBoard.npc.close(winner)
 					winText = myFont.render("Player BLACK wins!!!", 1, BLACK_COLOR)
-				elif gameBoard.winConditions() == 2:
-					gameBoard.npc.close(2)
+				elif winner == 2:
+					gameBoard.npc.close(winner)
 					winText = myFont.render("Player RED wins!!!", 1, (255, 0, 0))
 				else:
 					winText = myFont.render("We have a Draw...", 1, (150, 150, 150))

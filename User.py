@@ -66,7 +66,6 @@ class User(Player):
 
 	#Override
 	def play(self, line, collum, enemyPieces):
-		print line, collum
 		#See if the destiny is reached by moving 
 		if (line, collum) in self.movesOfSelectedToWalk:
 			self.selected.makeMove((line, collum), self.board)
@@ -75,9 +74,6 @@ class User(Player):
 		elif (line, collum) in self.movesOfSelectedToKill:
 			self.selected.makeKill((line,collum), enemyPieces, self.board)
 		self.deselect()
-		'''
-			2. Save the movement.
-		'''
 
 			
 		

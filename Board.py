@@ -40,7 +40,16 @@ class Board:
 					[self.redOnes[0], None, self.redOnes[1], None, self.redOnes[2], None, self.redOnes[3], None],
 					[None, self.redOnes[4], None, self.redOnes[5], None, self.redOnes[6], None, self.redOnes[7]],
 					[self.redOnes[8], None, self.redOnes[9], None, self.redOnes[10], None, self.redOnes[11], None]]
-
+		'''
+		self.board = [[None, self.blackOnes[0], None, self.blackOnes[1], None, self.blackOnes[2], None, self.blackOnes[3]], 
+					[self.blackOnes[4], None, self.blackOnes[5], None, self.blackOnes[6], None, self.blackOnes[7], None],
+					[None, self.blackOnes[8], None, self.blackOnes[9], None, self.blackOnes[10], None, self.blackOnes[11]],
+					[None, None, self.redOnes[0], None, None, None, None, None],
+					[None, None, None, None, None, self.redOnes[5], None, self.redOnes[6]],
+					[None, None, self.redOnes[1], None, self.redOnes[2], None, self.redOnes[3], None],
+					[None, self.redOnes[4], None, None, None, None, None, self.redOnes[7]],
+					[self.redOnes[8], None, self.redOnes[9], None, self.redOnes[10], None, self.redOnes[11], None]]
+		'''
 		self.npc.board = self.board
 		self.user.board = self.board
 		#Set their positions
@@ -56,7 +65,7 @@ class Board:
 		hasKill, path = self.npc.play(self.getState(), self.board)
 
 		#If hasn't any move to do
-		if path[0] == (-10,-10):
+		if len(path) == 0:
 			self.blackOnes = [];
 			return;
 		
@@ -78,7 +87,6 @@ class Board:
 
 	#Let the user play
 	def playerTime(self, clickedLine, clickedCollum):
-		print self.board[clickedLine][clickedCollum]
 		#clicked on his own piece
 		if self.isRedTeam(self.board[clickedLine][clickedCollum]) and not self.sequenceKill:
 			self.user.setSelected(clickedLine, clickedCollum)
@@ -122,6 +130,7 @@ class Board:
 		if somePiece != None and somePiece.team == self.RED_TEAM:
 			return True
 		return False
+	
 	#The piece is a black one?
 	def isBlackTeam(self, somePiece):
 		if somePiece != None and somePiece.team == self.BLACK_TEAM:
